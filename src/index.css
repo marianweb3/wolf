@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "SaoTorpes";
+  src: url("./fonts/SaoTorpes.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CCMaladroit";
+  src: url("./fonts/CCMaladroitW00Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

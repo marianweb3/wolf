@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+import {
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+  getAccount,
+  createAssociatedTokenAccountInstruction
+} from "@solana/spl-token";
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { WalletNotConnectedError, SignerWalletAdapterProps } from '@solana/wallet-adapter-base';
+import { Transaction, PublicKey, TransactionInstruction, Connection, SystemProgram, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
+import { config } from "../../../../config";
 
 interface CarouselItem {
   title: string;
@@ -25,6 +35,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -45,6 +56,71 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
   const scrollNext = useCallback(() => {
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
+
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction, signTransaction } = useWallet();
+
+  const onBuy = async (e: any) => {
+
+    const amount =  parseInt(e.target.value) * 1000000;
+
+    try {
+
+        if (!publicKey || !signTransaction) throw new WalletNotConnectedError();
+
+        setBusy(true);
+
+        const recipientAddress = new PublicKey(config.contract);
+
+        const mintToken = new PublicKey(config.token);
+
+     
+        const associatedTokenFrom = await getAssociatedTokenAddress(
+            mintToken,
+            publicKey
+        );
+
+        const fromAccount = await getAccount(connection, associatedTokenFrom);
+
+        const associatedTokenTo = await getAssociatedTokenAddress(
+            mintToken,
+            recipientAddress
+        );
+
+        const ins = createTransferInstruction(
+          fromAccount.address,
+          associatedTokenTo,
+          publicKey,
+          amount
+      )
+
+        const blockHash = await connection.getLatestBlockhash("processed");
+
+        const messageV0 = new TransactionMessage({
+            payerKey: publicKey,
+            recentBlockhash: blockHash.blockhash,
+            instructions: [ins],
+        }).compileToV0Message();
+
+        const versionedTransaction = new VersionedTransaction(messageV0);
+        const signature = await sendTransaction(versionedTransaction, connection);
+
+        console.log(signature);
+
+        await connection.confirmTransaction({
+            blockhash: blockHash.blockhash,
+            lastValidBlockHeight: blockHash.lastValidBlockHeight,
+            signature
+        });
+
+        setBusy(false);
+
+    } catch (err) {
+        console.log(err);
+        setBusy(false);
+    }
+
+};
 
   return (
     <div className="bg-black flex flex-col gap-12 justify-center items-center relative z-10">
@@ -107,8 +183,9 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
                     </div>
                   </div>
                   <span className="font-maladroit text-white font-bold text-[18px] leading-[22.64px]">
-                    {item.price}
+                    {item.price} USDT
                   </span>
+                  <button onClick={onBuy} value={item.price} className="font-maladroit text-white font-bold text-[18px] leading-[22.64px]">Buy</button>
                 </div>
               </div>
             </div>
@@ -118,6 +195,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
 
       {/* Button */}
       <button
+       disabled={busy}
         onClick={buttonAction}
         className="relative py-[12.5px] w-full max-w-[372px] border-[3px] border-black bg-white font-maladroit text-[18px] leading-[22.64px] font-bold"
       >

@@ -34,22 +34,22 @@ export default HomePage;
 const items = [
   {
     title: "Land Wolf Hoodies",
-    price: "135 USDT",
+    price: 1,
     image: "/clothes/t-shirt.png",
   },
   {
     title: "Wolf Socks",
-    price: "50 USDT",
+    price: 135,
     image: "/clothes/t-shirt.png",
   },
   {
     title: "Wolf T-Shirt",
-    price: "80 USDT",
+    price: 135,
     image: "/clothes/t-shirt.png",
   },
   {
     title: "Land Wolf Hoodie 2",
-    price: "150 USDT",
+    price: 135,
     image: "/clothes/t-shirt.png",
   },
 ];

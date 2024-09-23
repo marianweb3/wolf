@@ -1,3 +1,7 @@
+import {
+  WalletMultiButton
+} from '@solana/wallet-adapter-react-ui';
+
 const Header = () => {
   return (
     <header className="bg-black flex items-center relative z-50">
@@ -59,6 +63,7 @@ const Header = () => {
               </a>
             </li>
           </ul>
+          <WalletMultiButton className="connect-button"></WalletMultiButton>
         </nav>
       </div>
       <div className="flex gap-3 absolute right-[160px]">

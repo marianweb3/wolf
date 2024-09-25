@@ -1,6 +1,7 @@
 import Layout from "../../components/layout/layout";
 import Banner from "./ui/banner/banner";
 import ClothingCollection from "./ui/clothing-collection/clothing-collection";
+import NewsUpdatesSection from "./ui/news-update-section/news-update-section";
 import ShopByCategory from "./ui/shop-by-category/shop-by-category";
 
 const HomePage = () => {
@@ -25,6 +26,7 @@ const HomePage = () => {
         buttonLabel="All clothes"
         buttonAction={handleButtonClick}
       />
+      <NewsUpdatesSection />
     </Layout>
   );
 };

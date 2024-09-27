@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Header from "./header";
 import Footer from "./footer";
+import CartSideBar from "../sidebars/cart/cart-sidebar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +13,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Header />
       <main className="flex-grow">{children}</main>
       <Footer />
+      <CartSideBar />
     </div>
   );
 };

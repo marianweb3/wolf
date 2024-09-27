@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/common/breadcrumb";
 import Layout from "@/components/layout/layout";
 import ProductItem from "@/components/product/product-item";
-import FiltersMenu from "@/components/filters/filters-menu";
+import FiltersMenu from "@/components/sidebars/filters/filters-menu";
 import useFiltersStore from "@/store/filtersStore";
 
 const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];

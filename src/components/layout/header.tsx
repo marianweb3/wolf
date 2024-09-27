@@ -3,11 +3,13 @@ import { IoCloseSharp } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import ProductItem from "../product/product-item";
 import { items } from "@/pages/homepage";
+import useCartStore from "@/store/cartStore";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const { isOpen, toggleCart } = useCartStore();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleSearch = () => {
@@ -189,10 +191,20 @@ const Header = () => {
         <div className="flex gap-3 min-[1680px]:absolute right-[160px]">
           <div
             className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
-            onClick={toggleSearch} // Toggle search visibility on click
+            onClick={toggleSearch}
           >
             <img
               src="/header/search.svg"
+              alt="Search"
+              className="max-w-[25px] sm:max-w-full"
+            />
+          </div>
+          <div
+            className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
+            onClick={toggleCart}
+          >
+            <img
+              src="/header/cart.svg"
               alt="Search"
               className="max-w-[25px] sm:max-w-full"
             />
@@ -203,10 +215,10 @@ const Header = () => {
       <AnimatePresence mode="wait">
         {isSearchVisible && (
           <motion.div
-            initial={{ opacity: 0, y: -50 }} // Initial position above
-            animate={{ opacity: 1, y: 0 }} // Animate to current position
-            exit={{ opacity: 0, y: -50 }} // Animate out
-            transition={{ duration: 0.4 }} // Duration of animation
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            transition={{ duration: 0.4 }}
           >
             <div className="bg-black py-8">
               <div className="max-w-[1600px] mx-auto w-full flex flex-col gap-6">

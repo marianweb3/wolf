@@ -5,8 +5,8 @@ import {
   SizeGuideArrow,
   TShirtIcon,
 } from "@/components/common/svg-icons";
-import ProductColorSelection from "@/components/filters/filter-controls/product-color-selection";
-import ProductSizeSelection from "@/components/filters/filter-controls/product-size-selection";
+import ProductColorSelection from "@/components/sidebars/filters/filter-controls/product-color-selection";
+import ProductSizeSelection from "@/components/sidebars/filters/filter-controls/product-size-selection";
 import Layout from "@/components/layout/layout";
 import { useState } from "react";
 import ProductImageGallery from "./ui/product-image-gallery";

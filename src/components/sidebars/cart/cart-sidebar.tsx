@@ -12,7 +12,7 @@ const CartSideBar = () => {
       size: "M",
       price: 78,
       salePrice: 54,
-      imageUrl: "/images/tshirt1.png",
+      imageUrl: "/clothes/t-shirt.png",
       isOutOfStock: false,
       quantity: 1,
     },
@@ -20,7 +20,7 @@ const CartSideBar = () => {
       name: "THE REAL LANWOLF",
       size: "M",
       price: 78,
-      imageUrl: "/images/tshirt2.png",
+      imageUrl: "/clothes/t-shirt.png",
       isOutOfStock: true,
       quantity: 0,
     },
@@ -47,7 +47,7 @@ const CartSideBar = () => {
 
   return (
     <motion.div
-      className="fixed top-0 right-0 border-l-2 border-black w-full h-full bg-white z-50 max-w-[549px] flex flex-col justify-between"
+      className="fixed top-0 right-0 border-l-2 border-black w-full h-full bg-white z-50 max-w-[637px] flex flex-col justify-between"
       initial={{ x: "100%" }}
       animate={{ x: isOpen ? 0 : "100%" }}
       transition={{ type: "tween", duration: 0.3 }}

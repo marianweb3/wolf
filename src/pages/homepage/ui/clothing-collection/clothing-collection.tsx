@@ -85,7 +85,6 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
         </div>
       </div>
 
-      {/* Carousel */}
       <div className="overflow-hidden w-full" ref={emblaRef}>
         <div className="flex gap-4">
           {items.map((item, index) => (

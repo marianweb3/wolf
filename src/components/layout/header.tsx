@@ -4,6 +4,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProductItem from "../product/product-item";
 import { items } from "@/pages/homepage";
 import useCartStore from "@/store/cartStore";
+import { Link } from "react-router-dom";
+
+const menuItems = [
+  { label: "Apparel", href: "/apparel" },
+  { label: "Accessories", href: "/accessories" },
+  { label: "Artwork", href: "/artwork" },
+  { label: "Tech Gear", href: "/tech-gear" },
+];
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,17 +22,15 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleSearch = () => {
     if (isSearchVisible) {
-      // If search is visible, start closing it
       setIsSearchVisible(false);
     } else {
-      // If not visible, show it immediately
       setIsSearchVisible(true);
     }
   };
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 1024); // 1024px is typically the 'lg' breakpoint in Tailwind
+      setIsMobile(window.innerWidth < 1024);
     };
 
     checkScreenSize();
@@ -35,9 +41,9 @@ const Header = () => {
 
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = "hidden"; // Prevent scrolling
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "auto"; // Restore scrolling
+      document.body.style.overflow = "auto";
     }
 
     return () => {
@@ -50,7 +56,6 @@ const Header = () => {
       <header className="bg-black flex items-center relative z-50 justify-between md:justify-center p-2">
         <div className="md:container min-[1680px]:mx-auto flex justify-center items-center">
           {isMobile ? (
-            // Mobile Header
             <nav
               className={`${
                 isMenuOpen
@@ -59,51 +64,43 @@ const Header = () => {
               } fixed top-0 left-0 w-full h-screen bg-black flex flex-col items-center justify-center transition-all duration-500 ease-in-out overflow-hidden`}
             >
               <ul className="flex flex-col space-y-6 w-full items-center">
-                {["Apparel", "Accessories", "Artwork", "Tech Gear"].map(
-                  (item, index) => (
-                    <li
-                      key={item}
-                      className={`transform transition-all duration-500 ease-in-out ${
-                        isMenuOpen
-                          ? "translate-y-0 opacity-100"
-                          : "translate-y-10 opacity-0"
-                      }`}
-                      style={{ transitionDelay: `${index * 100}ms` }}
+                {menuItems.map((item, index) => (
+                  <li
+                    key={item.label}
+                    className={`transform transition-all duration-500 ease-in-out ${
+                      isMenuOpen
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-10 opacity-0"
+                    }`}
+                    style={{ transitionDelay: `${index * 100}ms` }}
+                  >
+                    <a
+                      href={item.href}
+                      className="font-saotorpes text-[20px] leading-[16px] text-white uppercase block py-2 transition-all duration-300 ease-in-out text-shadow-white"
                     >
-                      <a
-                        href="/"
-                        className="font-saotorpes text-[20px] leading-[16px] text-white uppercase block py-2 hover:text-purple-500 transition-colors duration-300"
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  )
-                )}
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </nav>
           ) : (
             // Desktop Header (Original Design)
             <nav className="flex items-center gap-16 relative">
               <ul className="flex space-x-16">
-                <li>
-                  <a
-                    href="/"
-                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                  >
-                    Apparel
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/about"
-                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                  >
-                    Accessories
-                  </a>
-                </li>
+                {menuItems.slice(0, 2).map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="font-saotorpes text-[16px] leading-[16px] text-white uppercase text-shadow-white transition-all duration-300 ease-in-out"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
 
-              <div className="relative">
+              <Link to={"/"} className="relative">
                 <div
                   className="absolute bg-contain bg-no-repeat left-1/2 top-full w-[300px] xl:w-[344px] h-[135px]"
                   style={{
@@ -116,25 +113,19 @@ const Header = () => {
                   alt="Wolf Shop"
                   className="relative z-10 max-w-[220px] xl:max-w-[275px]"
                 />
-              </div>
+              </Link>
 
               <ul className="flex space-x-16">
-                <li>
-                  <a
-                    href="/"
-                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                  >
-                    Artwork
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/about"
-                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                  >
-                    Tech Gear
-                  </a>
-                </li>
+                {menuItems.slice(2).map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className="font-saotorpes text-[16px] leading-[16px] text-white uppercase text-shadow-white transition-all duration-300 ease-in-out"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </nav>
           )}

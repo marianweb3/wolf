@@ -1,7 +1,10 @@
+import Breadcrumb from "@/components/common/breadcrumb";
 import Layout from "@/components/layout/layout";
 import ProductItem from "@/components/product/product-item";
-import FiltersMenu from "@/components/sidebar/filters-menu";
+import FiltersMenu from "@/components/filters/filters-menu";
 import useFiltersStore from "@/store/filtersStore";
+
+const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
 
 const CategoryPage = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
@@ -9,15 +12,7 @@ const CategoryPage = () => {
   return (
     <Layout>
       <div className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full mt-[30px]">
-        <div className="flex items-center gap-3">
-          <span className="text-[#00000075] font-maladroit font-bold text-[14px] leading-[17.61px]">
-            Home
-          </span>
-          <div className="size-[6px] rounded-full bg-black"></div>
-          <span className="text-[#000000] font-maladroit font-bold text-[14px] leading-[17.61px]">
-            Apparel
-          </span>
-        </div>
+        <Breadcrumb items={breadcrumbItems} />
         <div className="w-full flex justify-between">
           <h1 className="font-saotorpes text-[48px] leading-[36.34px] text-black">
             all clothes

@@ -48,7 +48,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
   }, [emblaApi]);
 
   return (
-    <div className="bg-black flex flex-col gap-12 justify-center items-center relative z-10">
+    <section className="bg-black flex flex-col gap-12 justify-center items-center relative z-10">
       {/* Background Image */}
       <img
         src={backgroundImage}
@@ -105,7 +105,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
       >
         {buttonLabel}
       </button>
-    </div>
+    </section>
   );
 };
 

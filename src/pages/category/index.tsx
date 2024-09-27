@@ -8,7 +8,7 @@ const CategoryPage = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full mt-[30px]">
+      <section className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full mt-[30px]">
         <div className="flex items-center gap-3">
           <span className="text-[#00000075] font-maladroit font-bold text-[14px] leading-[17.61px]">
             Home
@@ -43,9 +43,9 @@ const CategoryPage = () => {
             </button>
           </div>
         </div>
-      </div>
+      </section>
       <FiltersMenu />
-      <div className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-3 gap-5 gap-y-10 mb-[200px]">
+      <section className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-3 gap-5 gap-y-10 mb-[200px]">
         {items.map((item, index) => (
           <ProductItem
             key={index}
@@ -55,7 +55,7 @@ const CategoryPage = () => {
             isBlack={true}
           />
         ))}
-      </div>
+      </section>
     </Layout>
   );
 };

@@ -53,18 +53,18 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
       <img
         src={backgroundImage}
         alt="Background"
-        className="absolute w-full h-[120%] z-0"
+        className="absolute w-full h-[120%] z-0 md:object-fill object-cover"
       />
 
       {/* Header */}
-      <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between relative">
-        <h2 className="font-saotorpes text-[48px] leading-[36.34px] text-white">
+      <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between relative px-4 lg:px-0">
+        <h2 className="font-saotorpes text-[28px] sm:text-[36px] md:text-[48px] leading-[32px] md:leading-[36.34px] text-white">
           {title}
         </h2>
-        <div className="flex gap-3">
+        <div className="flex gap-2 sm:gap-3">
           <button
             onClick={scrollPrev}
-            className={`w-[60px] h-[60px] bg-white rounded-full grid place-content-center ${
+            className={`w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[60px] md:h-[60px] bg-white rounded-full grid place-content-center ${
               !canScrollPrev ? "opacity-50" : ""
             }`}
           >
@@ -72,7 +72,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
           </button>
           <button
             onClick={scrollNext}
-            className={`w-[60px] h-[60px] bg-white rounded-full grid place-content-center ${
+            className={`w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[60px] md:h-[60px] bg-white rounded-full grid place-content-center ${
               !canScrollNext ? "opacity-50" : ""
             }`}
           >
@@ -85,15 +85,20 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
         </div>
       </div>
 
+      {/* Carousel */}
       <div className="overflow-hidden w-full" ref={emblaRef}>
-        <div className="flex gap-4 mr-4">
+        <div className="flex gap-4">
           {items.map((item, index) => (
-            <ProductItem
+            <div
               key={index}
-              title={item.title}
-              price={item.price}
-              image={item.image}
-            />
+              className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-1 px-2" // Adjust width based on viewport size
+            >
+              <ProductItem
+                title={item.title}
+                price={item.price}
+                image={item.image}
+              />
+            </div>
           ))}
         </div>
       </div>

@@ -17,8 +17,12 @@ const ProductItem = ({
   return (
     <div className="shrink-0 grow-0 flex justify-center">
       <div className="flex flex-col gap-4 max-w-[520px]">
-        <div className="bg-[#8CE6FF] h-[525px] px-[18px] py-6 border-2 border-black">
-          <img src={image} alt={title} className="object-none h-full w-full" />
+        <div className="bg-[#8CE6FF] px-[18px] py-6 border-2 border-black aspect-square">
+          <img
+            src={image}
+            alt={title}
+            className="object-cover 2xl:object-none h-full w-full"
+          />
         </div>
         <div className="flex flex-col gap-1">
           <div className="flex items-center justify-between">

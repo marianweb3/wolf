@@ -1,51 +1,46 @@
+import Breadcrumb from "@/components/common/breadcrumb";
 import Layout from "@/components/layout/layout";
 import ProductItem from "@/components/product/product-item";
-import FiltersMenu from "@/components/sidebar/filters-menu";
+import FiltersMenu from "@/components/sidebars/filters/filters-menu";
 import useFiltersStore from "@/store/filtersStore";
+
+const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
 
 const CategoryPage = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
 
   return (
     <Layout>
-      <section className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full mt-[30px]">
-        <div className="flex items-center gap-3">
-          <span className="text-[#00000075] font-maladroit font-bold text-[14px] leading-[17.61px]">
-            Home
-          </span>
-          <div className="size-[6px] rounded-full bg-black"></div>
-          <span className="text-[#000000] font-maladroit font-bold text-[14px] leading-[17.61px]">
-            Apparel
-          </span>
-        </div>
-        <div className="w-full flex justify-between">
-          <h1 className="font-saotorpes text-[48px] leading-[36.34px] text-black">
+      <div className="flex flex-col gap-6 max-w-[1600px] mx-auto w-full mt-[30px] 2xl:px-0 px-4">
+        <Breadcrumb items={breadcrumbItems} />
+        <div className="w-full flex flex-col sm:flex-row justify-between items-center">
+          <h1 className="font-saotorpes text-[32px] leading-[36.34px] text-black sm:text-[48px] sm:leading-[36.34px]">
             all clothes
           </h1>
-          <div className="max-w-[280px] w-full flex">
+          <div className="max-w-[280px] w-full flex flex-col sm:flex-row sm:justify-end">
             <button
-              className="border-2 border-black py-3 px-[35px]"
+              className="border-2 border-black py-2 px-4 sm:py-3 sm:px-[35px] mb-2 sm:mb-0"
               onClick={toggleMenu}
             >
-              <span className="text-black font-maladroit font-bold text-[16px] leading-[20.13px]">
+              <span className="text-black font-maladroit font-bold text-[14px] leading-[18px] sm:text-[16px] sm:leading-[20.13px]">
                 Filters
               </span>
             </button>
-            <button className="border-2 border-l-0 border-black py-3 px-[15.5px] flex items-center gap-3">
-              <span className="text-black font-maladroit font-bold text-[16px] leading-[20.13px]">
+            <button className="border-2 sm:border-l-0 border-black py-2 px-4 sm:py-3 sm:px-[15.5px] flex items-center gap-2">
+              <span className="text-black font-maladroit font-bold text-[14px] leading-[18px] sm:text-[16px] sm:leading-[20.13px]">
                 sort by
               </span>
               <img
                 src="/icons/arrow.svg"
                 alt="Arrow Right"
-                className="transform rotate-[-90deg]"
+                className="transform rotate-[-90deg] w-[16px] h-[16px] sm:w-[20px] sm:h-[20px]"
               />
             </button>
           </div>
         </div>
-      </section>
+      </div>
       <FiltersMenu />
-      <section className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-3 gap-5 gap-y-10 mb-[200px]">
+      <div className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 gap-y-10 mb-[200px] 2xl:px-0 px-4">
         {items.map((item, index) => (
           <ProductItem
             key={index}
@@ -55,7 +50,7 @@ const CategoryPage = () => {
             isBlack={true}
           />
         ))}
-      </section>
+      </div>
     </Layout>
   );
 };

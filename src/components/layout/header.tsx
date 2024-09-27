@@ -1,10 +1,24 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { IoCloseSharp } from "react-icons/io5";
+import { AnimatePresence, motion } from "framer-motion";
+import ProductItem from "../product/product-item";
+import { items } from "@/pages/homepage";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleSearch = () => {
+    if (isSearchVisible) {
+      // If search is visible, start closing it
+      setIsSearchVisible(false);
+    } else {
+      // If not visible, show it immediately
+      setIsSearchVisible(true);
+    }
+  };
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -30,171 +44,217 @@ const Header = () => {
   }, [isMenuOpen]);
 
   return (
-    <header className="bg-black flex items-center relative z-50 justify-between md:justify-center p-2">
-      <div className="md:container min-[1680px]:mx-auto flex justify-center items-center">
-        {isMobile ? (
-          // Mobile Header
-          <nav
-            className={`
-              ${
+    <div>
+      <header className="bg-black flex items-center relative z-50 justify-between md:justify-center p-2">
+        <div className="md:container min-[1680px]:mx-auto flex justify-center items-center">
+          {isMobile ? (
+            // Mobile Header
+            <nav
+              className={`${
                 isMenuOpen
                   ? "translate-y-0 opacity-100"
                   : "-translate-y-full opacity-0"
-              }
-              fixed top-0 left-0 w-full h-screen
-              bg-black
-              flex flex-col items-center justify-center
-              transition-all duration-500 ease-in-out
-              overflow-hidden
-            `}
-          >
-            <ul className="flex flex-col space-y-6 w-full items-center">
-              {["Apparel", "Accessories", "Artwork", "Tech Gear"].map(
-                (item, index) => (
-                  <li
-                    key={item}
-                    className={`transform transition-all duration-500 ease-in-out ${
-                      isMenuOpen
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-10 opacity-0"
-                    }`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                  >
-                    <a
-                      href="/"
-                      className="font-saotorpes text-[20px] leading-[16px] text-white uppercase block py-2 hover:text-purple-500 transition-colors duration-300"
+              } fixed top-0 left-0 w-full h-screen bg-black flex flex-col items-center justify-center transition-all duration-500 ease-in-out overflow-hidden`}
+            >
+              <ul className="flex flex-col space-y-6 w-full items-center">
+                {["Apparel", "Accessories", "Artwork", "Tech Gear"].map(
+                  (item, index) => (
+                    <li
+                      key={item}
+                      className={`transform transition-all duration-500 ease-in-out ${
+                        isMenuOpen
+                          ? "translate-y-0 opacity-100"
+                          : "translate-y-10 opacity-0"
+                      }`}
+                      style={{ transitionDelay: `${index * 100}ms` }}
                     >
-                      {item}
-                    </a>
-                  </li>
-                )
-              )}
-            </ul>
-          </nav>
-        ) : (
-          // Desktop Header (Original Design)
-          <nav className="flex items-center gap-16 relative">
-            <ul className="flex space-x-16">
-              <li>
-                <a
-                  href="/"
-                  className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                >
-                  Apparel
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/about"
-                  className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                >
-                  Accessories
-                </a>
-              </li>
-            </ul>
+                      <a
+                        href="/"
+                        className="font-saotorpes text-[20px] leading-[16px] text-white uppercase block py-2 hover:text-purple-500 transition-colors duration-300"
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </nav>
+          ) : (
+            // Desktop Header (Original Design)
+            <nav className="flex items-center gap-16 relative">
+              <ul className="flex space-x-16">
+                <li>
+                  <a
+                    href="/"
+                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
+                  >
+                    Apparel
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/about"
+                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
+                  >
+                    Accessories
+                  </a>
+                </li>
+              </ul>
 
-            <div className="relative">
-              <div
-                className="absolute bg-contain bg-no-repeat left-1/2 top-full w-[300px] xl:w-[344px] h-[135px]"
-                style={{
-                  backgroundImage: "url('/logo-bg.png')",
-                  transform: "translate(-50%, -50%)",
-                }}
-              ></div>
-              <img
-                src="/wolfshop.webp"
-                alt="Wolf Shop"
-                className="relative z-10 max-w-[220px] xl:max-w-[275px]"
-              />
+              <div className="relative">
+                <div
+                  className="absolute bg-contain bg-no-repeat left-1/2 top-full w-[300px] xl:w-[344px] h-[135px]"
+                  style={{
+                    backgroundImage: "url('/logo-bg.png')",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                ></div>
+                <img
+                  src="/wolfshop.webp"
+                  alt="Wolf Shop"
+                  className="relative z-10 max-w-[220px] xl:max-w-[275px]"
+                />
+              </div>
+
+              <ul className="flex space-x-16">
+                <li>
+                  <a
+                    href="/"
+                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
+                  >
+                    Artwork
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="/about"
+                    className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
+                  >
+                    Tech Gear
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          )}
+        </div>
+        {isMobile && (
+          <button
+            onClick={toggleMenu}
+            className={`relative z-50 w-10 h-10 text-white focus:outline-none transition-transform duration-300 ${
+              isMenuOpen ? "translate-x-[-25px]" : ""
+            }`}
+          >
+            <span className="sr-only">Toggle menu</span>
+            <div className="absolute w-5 transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
+              <span
+                aria-hidden="true"
+                className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
+                  isMenuOpen ? "rotate-45" : "-translate-y-1.5"
+                }`}
+              ></span>
+              <span
+                aria-hidden="true"
+                className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
+                  isMenuOpen ? "opacity-0" : "opacity-100"
+                }`}
+              ></span>
+              <span
+                aria-hidden="true"
+                className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
+                  isMenuOpen ? "-rotate-45" : "translate-y-1.5"
+                }`}
+              ></span>
             </div>
-
-            <ul className="flex space-x-16">
-              <li>
-                <a
-                  href="/"
-                  className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                >
-                  Artwork
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/about"
-                  className="font-saotorpes text-[16px] leading-[16px] text-white uppercase"
-                >
-                  Tech Gear
-                </a>
-              </li>
-            </ul>
-          </nav>
+          </button>
         )}
-      </div>
-      {isMobile && (
-        <button
-          onClick={toggleMenu}
-          className={`relative z-50 w-10 h-10 text-white focus:outline-none transition-transform duration-300 ${
-            isMenuOpen ? "translate-x-[-25px]" : ""
-          }`}
-        >
-          <span className="sr-only">Toggle menu</span>
-          <div className="absolute w-5 transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2">
-            <span
-              aria-hidden="true"
-              className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                isMenuOpen ? "rotate-45" : "-translate-y-1.5"
-              }`}
-            ></span>
-            <span
-              aria-hidden="true"
-              className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                isMenuOpen ? "opacity-0" : "opacity-100"
-              }`}
-            ></span>
-            <span
-              aria-hidden="true"
-              className={`block absolute h-0.5 w-5 bg-white transform transition duration-300 ease-in-out ${
-                isMenuOpen ? "-rotate-45" : "translate-y-1.5"
-              }`}
-            ></span>
+
+        <div className="relative md:hidden block">
+          <div
+            className={`absolute bg-contain bg-no-repeat left-1/2 top-full w-[300px] xl:w-[344px] h-[135px] transition-opacity duration-500 ease-in-out transform ${
+              isMenuOpen ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              backgroundImage: "url('/logo-bg.png')",
+              transform: "translate(-50%, -50%)",
+            }}
+          ></div>
+
+          <img
+            src="/wolfshop.webp"
+            alt="Wolf Shop"
+            className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
+          />
+        </div>
+
+        <div className="flex gap-3 min-[1680px]:absolute right-[160px]">
+          <div
+            className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
+            onClick={toggleSearch} // Toggle search visibility on click
+          >
+            <img
+              src="/header/search.svg"
+              alt="Search"
+              className="max-w-[25px] sm:max-w-full"
+            />
           </div>
-        </button>
-      )}
-
-      <div className="relative md:hidden block">
-        <div
-          className={`absolute bg-contain bg-no-repeat left-1/2 top-full w-[300px] xl:w-[344px] h-[135px] transition-opacity duration-500 ease-in-out transform ${
-            isMenuOpen ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            backgroundImage: "url('/logo-bg.png')",
-            transform: "translate(-50%, -50%)",
-          }}
-        ></div>
-
-        <img
-          src="/wolfshop.webp"
-          alt="Wolf Shop"
-          className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
-        />
-      </div>
-
-      <div className="flex gap-3 min-[1680px]:absolute right-[160px]">
-        <div className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center">
-          <img
-            src="/header/search.svg"
-            alt="Search"
-            className="max-w-[25px] sm:max-w-full"
-          />
         </div>
-        <div className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center">
-          <img
-            src="/header/cart.svg"
-            alt="Cart"
-            className="max-w-[20px] sm:max-w-full"
-          />
-        </div>
-      </div>
-    </header>
+      </header>
+
+      <AnimatePresence mode="wait">
+        {isSearchVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }} // Initial position above
+            animate={{ opacity: 1, y: 0 }} // Animate to current position
+            exit={{ opacity: 0, y: -50 }} // Animate out
+            transition={{ duration: 0.4 }} // Duration of animation
+          >
+            <div className="bg-black py-8">
+              <div className="max-w-[1600px] mx-auto w-full flex flex-col gap-6">
+                <div className="flex items-center">
+                  <div className="flex items-center gap-4 w-full">
+                    <div className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center">
+                      <img
+                        src="/header/search.svg"
+                        alt="Search"
+                        className="max-w-[25px] sm:max-w-full"
+                      />
+                    </div>
+                    <input
+                      type="email"
+                      className="w-full px-4 py-3 font-maladroit bg-transparent font-bold text-base md:text-[20px] placeholder:text-[#FFFFFF99] text-[#FFFFFF99] focus:outline-none transition-all duration-300 ease-in-out"
+                      placeholder="email@email.com"
+                      required
+                    />
+                  </div>
+                  <IoCloseSharp
+                    size={40}
+                    color="white"
+                    className="cursor-pointer"
+                    onClick={toggleSearch}
+                  />
+                </div>
+                <div className="grid grid-cols-3 gap-5">
+                  {items.slice(0, 3).map((item, index) => (
+                    <ProductItem
+                      key={index}
+                      title={item.title}
+                      price={item.price}
+                      image={item.image}
+                      isBlack={false}
+                    />
+                  ))}
+                </div>
+                <button className="py-3 px-5 border-[3px] border-black max-w-[337px] w-full bg-white mx-auto">
+                  <span className="font-maladroit text-[18px] font-bold text-black">
+                    view all results
+                  </span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 

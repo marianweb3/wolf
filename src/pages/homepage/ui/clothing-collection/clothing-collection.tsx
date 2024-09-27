@@ -53,7 +53,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
       <img
         src={backgroundImage}
         alt="Background"
-        className="absolute w-full h-[120%] z-0"
+        className="absolute w-full h-[120%] z-0 md:object-fill object-cover"
       />
 
       {/* Header */}

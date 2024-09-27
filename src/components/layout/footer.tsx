@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className=" relative">
+    <div className="relative">
       <img
         src={"/black-bg.webp"}
         alt="Background"

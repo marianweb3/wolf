@@ -25,3 +25,79 @@
 body {
   background-color: #fffdf7;
 }
+
+input[type="range"] {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  /*  slider progress trick  */
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Track: webkit browsers */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 15px;
+  background: #000;
+  border-radius: 16px;
+}
+
+/* Track: Mozilla Firefox */
+input[type="range"]::-moz-range-track {
+  height: 15px;
+  background: #000;
+  border-radius: 16px;
+}
+
+/* Thumb: webkit */
+input[type="range"]::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid #e469ff;
+  /*  slider progress trick  */
+  box-shadow: -407px 0 0 400px #e469ff;
+}
+
+/* Thumb: Firefox */
+input[type="range"]::-moz-range-thumb {
+  height: 15px;
+  width: 15px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #f50;
+  /*  slider progress trick  */
+  box-shadow: -407px 0 0 400px #f50;
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  max-width: 500px;
+  background: #fff;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(-1deg);
+  }
+}
+
+.car-rotate {
+  animation: rotate 2s ease-in-out infinite;
+}

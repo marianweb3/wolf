@@ -33,7 +33,7 @@ const HomePage = () => {
 
 export default HomePage;
 
-const items = [
+export const items = [
   {
     title: "Land Wolf Hoodies",
     price: "135 USDT",

@@ -14,6 +14,9 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {},
+      screens: {
+        xxl: "1780px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

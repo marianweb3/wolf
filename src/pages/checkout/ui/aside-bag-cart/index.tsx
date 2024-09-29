@@ -1,8 +1,9 @@
 import React from "react";
 import ItemCard from "@/pages/checkout/ui/aside-bag-cart/ItemCard";
 import clsx from "clsx";
+import useCartStore from "@/store/cartStore";
 
-const ZeroConverter = ({ el }: { el: number }) => {
+export const ZeroConverter = ({ el }: { el: number }) => {
   return (
     <>
       {el === 0 ? (
@@ -21,47 +22,46 @@ const AsideBagCart = () => {
   const tax = 30;
   const delivery = 0;
 
+  const { isOpen, toggleCart } = useCartStore();
+
   return (
     <aside
       className={clsx(
-        "flex flex-col  w-full  border-black bg-[#FFFDF7]",
-        "w-full xl:max-w-[720px] border-t-2 xl:border-l-2",
-        "py-[90px] pl-[50px] pr-[130px] xl:py-[120px] xl:pl-[80px] xl:pr-[160px]"
+        "flex flex-col justify-start w-full  border-black bg-[#FFFDF7]",
+        "w-full max-w-full lg:max-w-[440px] xl:max-w-[720px] border-t-2 xl:border-l-2",
+        "pt-[50px] pb-[20px] pl-[30px] pr-[30px] md:pl-[50px] md:pr-[50px] lg:pb-[90px] lg:pt-[90px] lg:pr-[50px] xl:pb-[120px] xl:pt-[120px] xl:px-[80px] xl:pr-[160px]"
       )}
     >
-      <div className={"flex justify-between mb-[40px]"}>
+      <div className={"flex justify-between mb-[30px] md:mb-[40px]"}>
         <h2
           className={
-            "text-[34px] font-[400] text-black font-saotorpes whitespace-nowrap leading-[100%]"
+            "text-[24px] md:text-[34px] font-[400] text-black font-saotorpes whitespace-nowrap leading-[100%]"
           }
         >
           IN YOUR BAG
         </h2>
 
-        <button
-          className={
-            "text-[16px] font-[700] underline text-black font-maladroit"
-          }
-        >
-          EDIT
-        </button>
+        <div className={"flex items-end border-b border-black"}>
+          <button
+            onClick={toggleCart}
+            className={
+              "text-[14px] md:text-[16px] font-[700] leading-[120%] text-black font-maladroit"
+            }
+          >
+            EDIT
+          </button>
+        </div>
       </div>
 
       {/*Subtotal*/}
       <div
         className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[12px]"
+          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
         }
       >
-        <h3
-          className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-        >
-          SUBTOTAL
-        </h3>
+        <h3 className={"your_bag_text"}>SUBTOTAL</h3>
         <div>
-          <h3
-            className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-          >
+          <h3 className={"your_bag_text"}>
             <ZeroConverter el={sub_total} />
           </h3>
         </div>
@@ -70,18 +70,12 @@ const AsideBagCart = () => {
       {/*Tax*/}
       <div
         className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[12px]"
+          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
         }
       >
-        <h3
-          className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-        >
-          TAX%
-        </h3>
+        <h3 className={"your_bag_text"}>TAX%</h3>
         <div>
-          <h3
-            className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-          >
+          <h3 className={"your_bag_text"}>
             <ZeroConverter el={tax} />
           </h3>
         </div>
@@ -91,18 +85,12 @@ const AsideBagCart = () => {
 
       <div
         className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[12px]"
+          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
         }
       >
-        <h3
-          className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-        >
-          DELIVERY/SHIPPING
-        </h3>
+        <h3 className={"your_bag_text"}>DELIVERY/SHIPPING</h3>
         <div>
-          <h3
-            className={"text-[#0000004D] text-[20px] font-[700] font-maladroit"}
-          >
+          <h3 className={"your_bag_text"}>
             <ZeroConverter el={delivery} />
           </h3>
         </div>
@@ -112,14 +100,12 @@ const AsideBagCart = () => {
 
       <div
         className={
-          "flex justify-between border-y-2 border-black px-[8px] py-[12px]"
+          "flex justify-between border-y-2 border-black px-[8px] py-[8px] md:py-[12px]"
         }
       >
-        <h3 className={"text-black text-[20px] font-[700] font-maladroit"}>
-          TOTAL
-        </h3>
+        <h3 className={"your_bag_text"}>TOTAL</h3>
         <div>
-          <h3 className={"text-black text-[20px] font-[700] font-maladroit"}>
+          <h3 className={"your_bag_text"}>
             <ZeroConverter el={sub_total + tax + delivery} />
           </h3>
         </div>

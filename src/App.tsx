@@ -3,6 +3,7 @@ import HomePage from "./pages/homepage";
 import CategoryPage from "./pages/category";
 import CheckoutPage from "@/pages/checkout";
 import ProductPage from "./pages/product";
+import OrderConfirmedPage from "@/pages/order-confirmed";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/products" element={<CategoryPage />} />
         <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/order-confirmed" element={<OrderConfirmedPage />} />
       </Routes>
     </Router>
   );

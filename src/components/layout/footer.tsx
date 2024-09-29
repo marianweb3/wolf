@@ -95,7 +95,7 @@ const Footer = () => {
               />
               <img
                 src="/icons/white-input-color.svg"
-                alt="Input Arrow"
+                alt="CheckoutInput Arrow"
                 className="absolute right-[10px] top-0 bottom-0 m-auto"
               />
             </div>

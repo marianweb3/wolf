@@ -1,26 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@/components/layout/layout";
 import AsideBagCart from "@/pages/checkout/ui/aside-bag-cart";
-import DeliverySection from "@/pages/checkout/ui/delivery-section";
+import { motion } from "framer-motion";
+import FormLayout from "@/pages/checkout/ui/form-layout";
 
 const CheckoutPage = () => {
+  const [submitted, setSubmitted] = useState(false); // Track form submission
+
   return (
     <Layout>
-      <section className={"flex flex-col xl:flex-row bg-[#F0F0F0]"}>
+      <section className={"flex flex-col-reverse lg:flex-row bg-[#F0F0F0]"}>
         <div className={"w-full flex justify-center"}>
           <div
             className={
-              "flex flex-col gap-[24px] max-w-[792px] w-full p-[20px] pt-[120px] pb-[185px]"
+              "flex flex-col max-w-[792px] w-full px-[20px] pt-[60px] md:pt-[120px]"
             }
           >
-            <DeliverySection />
-            <div className={"flex flex-col"}>
-              <h1 className="font-saotorpes px-[10px] pt-[30px] pb-[20px] text-[40px] font-[400] leading-[100%] text-black border-y border-black opacity-[0.2]">
-                PAYMENT
-              </h1>
-              <h1 className="font-saotorpes px-[10px] pt-[30px] pb-[20px] text-[40px] font-[400] leading-[100%] text-black border-b border-black opacity-[0.2]">
+            <FormLayout submitted={submitted} setSubmitted={setSubmitted} />
+
+            {/* Payment and Order Review sections always visible */}
+            {/*helper div for making smooth animation between unsubmitted and submitted form changing cause div overlapping forms*/}
+            <div className="relative z-0 bg-[#F0F0F0] h-full w-full pb-[185px]">
+              {/* Animate Order Review disappearance */}
+              <motion.h1
+                className="font-saotorpes px-[10px] pt-[20px] md:pt-[30px] pb-[10px] md:pb-[20px] text-[#C0C0C0] text-[30px] md:text-[40px] font-[400] leading-[100%] border-b border-[#C0C0C0]"
+                initial={{ opacity: 1 }} // Fully visible initially
+                animate={submitted ? { opacity: 0 } : { opacity: 1 }} // Fade out on submit
+                transition={{ duration: 1 }} // Adjust the duration for smoothness
+              >
                 ORDER REVIEW
-              </h1>
+              </motion.h1>
             </div>
           </div>
         </div>

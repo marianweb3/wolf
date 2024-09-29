@@ -1,4 +1,13 @@
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+
 const Footer = () => {
+  // Create a reference for the car image
+  const carRef = useRef(null);
+
+  // Use the inView hook to detect when the car comes into view
+  const isInView = useInView(carRef, { once: true });
+
   return (
     <div className="relative">
       <img
@@ -6,13 +15,37 @@ const Footer = () => {
         alt="Background"
         className="absolute w-full h-[120%] md:h-[140%] z-0 top-[-10%] sm:top-[-17%] md:object-fill object-cover"
       />
-      <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between py-[50px] relative z-10 2xl:px-0 px-4 gap-10 2xl:gap-0 xl:flex-row flex-col">
+      <div
+        ref={carRef} // Attach the ref to the car element
+        className="max-w-[1600px] mx-auto w-full flex items-center justify-between py-[50px] relative z-10 2xl:px-0 px-4 gap-10 2xl:gap-0 xl:flex-row flex-col"
+      >
         <img src="/icons/footer-text.svg" alt="Footer Logo" />
-        <img
+        {/* Animated Footer Car with Full 360 X-Axis Spin */}
+        <motion.img
           src="/icons/footer-car.png"
-          alt="Footer Logo"
-          className="absolute car-rotate"
+          alt="Footer Car"
+          className="absolute"
+          ref={carRef} // Attach the ref to the car element
+          initial={{ x: "-100vw" }} // Start off-screen to the left
+          animate={
+            isInView
+              ? { x: 0, rotateY: [0, 360], rotate: [0, -2, 2, -2, 0] } // Back-and-forth "dribbling" // Full 360-degree X-axis spin when in view
+              : { x: "-100vw", rotateY: 0, rotate: 0 }
+          }
+          transition={{
+            x: { duration: 1, ease: "easeInOut" }, // Smooth slide transition
+            rotateY: {
+              duration: 2, // Time for full spin
+              ease: "easeInOut", // Smooth spinning
+            },
+            rotate: {
+              duration: 2, // Time for full spin
+              ease: "easeInOut", // Smooth spinning
+              repeat: Infinity, // Continuous spinning
+            },
+          }}
         />
+
         <div className="flex flex-col gap-14 max-w-[761px] w-full">
           <div className="w-full flex justify-between text-white flex-wrap gap-10">
             <div className="flex flex-col gap-5 ">

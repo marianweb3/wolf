@@ -13,25 +13,25 @@ const ShopByCategory = () => {
             image="/categories/apparel.png"
             text="Apparel"
             bgColor="#FA51FF"
-            link="/apparel"
+            link="/products"
           />
           <CategoryCard
             image="/categories/tech-gear.png"
             text="Tech Gear"
             bgColor="#000000"
-            link="/tech-gear"
+            link="/products"
           />
           <CategoryCard
             image="/categories/artwork.png"
             text="Artwork"
             bgColor="#FFFAED"
-            link="/artwork"
+            link="/products"
           />
           <CategoryCard
             image="/categories/accessories.png"
             text="Accessories"
             bgColor="#FFD85A"
-            link="/accessories"
+            link="/products"
           />
         </div>
       </div>

@@ -17,7 +17,7 @@ const CategoryPage = () => {
           <h1 className="font-saotorpes text-[32px] leading-[36.34px] text-black sm:text-[48px] sm:leading-[36.34px]">
             all clothes
           </h1>
-          <div className="max-w-[280px] w-full flex flex-col sm:flex-row sm:justify-end">
+          <div className="max-w-[285px] w-full flex flex-col sm:flex-row sm:justify-end">
             <button
               className="border-2 border-black py-2 px-4 sm:py-3 sm:px-[35px] mb-2 sm:mb-0"
               onClick={toggleMenu}

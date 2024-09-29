@@ -63,9 +63,10 @@ const Banner = () => {
           />
           <button
             className="relative mt-[-10%] uppercase font-bold text-[12px] sm:text-[14px] md:text-[16px] lg:text-[18px] leading-[16px] sm:leading-[18px] md:leading-[20px] lg:leading-[22.64px]
-            text-black py-[8px] sm:py-[10px] md:py-[12px] lg:py-[15px] max-w-[160px] sm:max-w-[180px] md:max-w-[210px] lg:max-w-[314px] w-full border-[1px] sm:border-[2px] md:border-[4px] border-black border-l-[3px] sm:border-l-[5px] md:border-l-[10px] bg-[#FFDD20]"
+  text-black py-[8px] sm:py-[10px] md:py-[12px] lg:py-[15px] max-w-[160px] sm:max-w-[180px] md:max-w-[210px] lg:max-w-[314px] w-full border-[1px] sm:border-[2px] md:border-[4px] border-black border-l-[3px] sm:border-l-[5px] md:border-l-[10px] bg-[#FFDD20]
+  hover:bg-black hover:text-white hover:border-l-[2px] hover:border-r-[4px] hover:border-black transition-all duration-300"
           >
-            SHOP now
+            SHOP NOW
           </button>
         </div>
 

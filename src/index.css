@@ -114,3 +114,8 @@ input[type="range"]::-moz-range-thumb {
 .car-rotate {
   animation: rotate 2s ease-in-out infinite;
 }
+
+.text-shadow-white:hover {
+  color: rgba(0, 0, 0, 0.267);
+  text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.7);
+}

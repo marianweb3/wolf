@@ -30,9 +30,7 @@ const CartItem = ({
     <div className="border-b-2 border-black py-4">
       <div className="flex items-start space-x-4">
         <div
-          className={`w-full max-w-[139px] h-[123px] flex-shrink-0 border border-black ${
-            isOutOfStock ? "opacity-50" : ""
-          }`}
+          className={`w-full max-w-[139px] h-[123px] flex-shrink-0 border border-black `}
           style={{ backgroundColor: "#e6f7ff" }}
         >
           <img
@@ -87,18 +85,16 @@ const CartItem = ({
               OUT OF STOCK
             </div>
           ) : (
-            <div className="flex items-center space-x-4 mt-2">
-              <div className="flex items-center space-x-2">
-                <NumberControl
-                  value={quantity}
-                  onChange={() => {}}
-                  min={0}
-                  max={10}
-                />
-              </div>
+            <div className="flex items-center gap-6 mt-2">
+              <NumberControl
+                value={quantity}
+                onChange={() => {}}
+                min={0}
+                max={10}
+              />
 
               <button
-                className="text-gray-400 hover:text-black"
+                className="text-[#cccccc] font-maladroit text-[16px] font-bold underline hover:text-black"
                 onClick={onRemove}
               >
                 REMOVE

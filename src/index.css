@@ -22,6 +22,19 @@
   }
 }
 
+@layer components {
+  .details_text {
+    @apply text-[#0000004D] text-[16px] md:text-[18px] leading-[120%] md:leading-[130%] font-[700] font-maladroit uppercase;
+  }
+  .details_text_header {
+    @apply font-saotorpes text-black text-[16px] md:text-[18px] font-[400] leading-[100%] uppercase;
+  }
+  .your_bag_text {
+    @apply text-[#0000004D] text-[16px] md:text-[20px] font-[700] font-maladroit uppercase;
+  }
+}
+
+
 body {
   background-color: #fffdf7;
 }

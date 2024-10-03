@@ -12,6 +12,7 @@ const menuItems = [
   { label: "Artwork", href: "/artwork" },
   { label: "Tech Gear", href: "/tech-gear" },
 ];
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -178,6 +179,7 @@ const Header = () => {
             className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
           />
         </div>
+        <WalletMultiButton className="connect-button"></WalletMultiButton>
 
         <div className="flex gap-3 min-[1680px]:absolute right-[160px]">
           <div

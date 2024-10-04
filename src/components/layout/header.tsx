@@ -6,6 +6,7 @@ import useCartStore from "@/store/cartStore";
 import { Link } from "react-router-dom";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import debounce from "lodash/debounce";
+import { API } from "@/utils/api";
 
 interface MenuItem {
   label: string;
@@ -77,7 +78,7 @@ const Header = () => {
         setIsSearching(true);
         try {
           const response = await fetch(
-            `http://185.235.241.248:5000/api/products/search?name=${term}`
+            `${API}/api/products/search?name=${term}`
           );
           const data: Product[] | { message: string } = await response.json();
           if (Array.isArray(data)) {
@@ -308,7 +309,7 @@ const Header = () => {
                           key={item.id}
                           title={item.name}
                           price={parseFloat(item.price)}
-                          image={`http://185.235.241.248:5000/${item.img}`}
+                          image={`${API}/${item.img}`}
                           isBlack={false}
                         />
                       ))}

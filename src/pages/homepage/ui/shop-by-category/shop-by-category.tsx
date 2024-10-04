@@ -1,3 +1,4 @@
+import { API } from "@/utils/api";
 import CategoryCard from "./category-card";
 import useSWR from "swr";
 
@@ -12,7 +13,7 @@ const fetcher = (url: string): Promise<any> =>
 
 const ShopByCategory: React.FC = () => {
   const { data, error, isLoading } = useSWR<Category[]>(
-    "http://185.235.241.248:5000/api/type",
+    `${API}/api/type`,
     fetcher
   );
 
@@ -30,7 +31,7 @@ const ShopByCategory: React.FC = () => {
           {data?.map((category) => (
             <CategoryCard
               key={category.id}
-              image={`http://185.235.241.248:5000/${category.prewiewImg}`}
+              image={`${API}/${category.prewiewImg}`}
               text={category.name}
               bgColor="#FA51FF"
               link="/products"

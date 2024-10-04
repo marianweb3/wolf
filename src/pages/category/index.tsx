@@ -5,6 +5,7 @@ import Layout from "@/components/layout/layout";
 import ProductItem from "@/components/product/product-item";
 import FiltersMenu from "@/components/sidebars/filters/filters-menu";
 import useFiltersStore from "@/store/filtersStore";
+import { API } from "@/utils/api";
 
 interface Product {
   id: number;
@@ -25,7 +26,7 @@ const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
 const CategoryPage: React.FC = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
   const { data, error, isLoading } = useSWR<ApiResponse, Error>(
-    "http://185.235.241.248:5000/api/device",
+    `${API}/api/device`,
     fetcher
   );
 
@@ -71,7 +72,7 @@ const CategoryPage: React.FC = () => {
               key={item.id}
               title={item.name}
               price={parseFloat(item.price)}
-              image={`http://185.235.241.248:5000/${item.img}`}
+              image={`${API}/${item.img}`}
               isBlack={true}
             />
           ))

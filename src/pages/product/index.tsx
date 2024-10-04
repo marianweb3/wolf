@@ -13,6 +13,7 @@ import ProductImageGallery from "./ui/product-image-gallery";
 import ClothingCollection from "../homepage/ui/clothing-collection/clothing-collection";
 import { items } from "../homepage";
 import { useParams } from "react-router-dom";
+import { API } from "@/utils/api";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },
@@ -37,9 +38,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(
-          `http://185.235.241.248:5000/api/device?type=1`
-        );
+        const response = await fetch(`${API}/api/device?type=1`);
         const data = await response.json();
         setProduct(data.rows[0]); // Assuming we're displaying the first product
       } catch (error) {
@@ -75,7 +74,7 @@ const ProductPage = () => {
             images={[
               {
                 id: 1,
-                src: `http://185.235.241.248:5000/${product.img}`,
+                src: `${API}/${product.img}`,
                 alt: product.name,
               },
             ]}

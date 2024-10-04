@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      // crypto: "crypto-browserify",
       "@": path.resolve(__dirname, "./src"),
-      crypto: "crypto-browserify",
     },
   },
 });

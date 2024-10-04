@@ -1,10 +1,23 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import ProductItem from "../product/product-item";
-import { items } from "@/pages/homepage";
 import useCartStore from "@/store/cartStore";
 import { Link } from "react-router-dom";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import debounce from "lodash/debounce";
+
+interface MenuItem {
+  label: string;
+  href: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  img: string;
+}
 
 const menuItems = [
   { label: "Apparel", href: "/products" },
@@ -13,20 +26,25 @@ const menuItems = [
   { label: "Artwork", href: "/artwork" },
   { label: "Tech Gear", href: "/tech-gear" },
 ];
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-
+interface SearchResponse {
+  message?: string;
+  rows?: Product[];
+}
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { isOpen, toggleCart } = useCartStore();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleSearch = () => {
+    setIsSearchVisible(!isSearchVisible);
     if (isSearchVisible) {
-      setIsSearchVisible(false);
-    } else {
-      setIsSearchVisible(true);
+      setSearchTerm("");
+      setSearchResults([]);
     }
   };
 
@@ -52,6 +70,41 @@ const Header = () => {
       document.body.style.overflow = "auto";
     };
   }, [isMenuOpen]);
+
+  const debouncedSearch = useCallback(
+    debounce(async (term: string) => {
+      if (term.length > 0) {
+        setIsSearching(true);
+        try {
+          const response = await fetch(
+            `http://185.235.241.248:5000/api/products/search?name=${term}`
+          );
+          const data: Product[] | { message: string } = await response.json();
+          if (Array.isArray(data)) {
+            setSearchResults(data);
+          } else {
+            setSearchResults([]);
+          }
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+          setSearchResults([]);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+      }
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    debouncedSearch(searchTerm);
+  }, [searchTerm, debouncedSearch]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
     <div>
@@ -228,9 +281,11 @@ const Header = () => {
                       />
                     </div>
                     <input
-                      type="email"
+                      type="text"
                       className="w-full px-4 py-3 font-maladroit bg-transparent font-bold text-base md:text-[20px] placeholder:text-[#FFFFFF99] text-[#FFFFFF99] focus:outline-none transition-all duration-300 ease-in-out"
-                      placeholder="email@email.com"
+                      placeholder="Search products..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
                       required
                     />
                   </div>
@@ -241,22 +296,36 @@ const Header = () => {
                     onClick={toggleSearch}
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-5">
-                  {items.slice(0, 3).map((item, index) => (
-                    <ProductItem
-                      key={index}
-                      title={item.title}
-                      price={item.price}
-                      image={item.image}
-                      isBlack={false}
-                    />
-                  ))}
-                </div>
-                <button className="py-3 px-5 border-[3px] border-black max-w-[337px] w-full bg-white mx-auto">
-                  <span className="font-maladroit text-[18px] font-bold text-black">
-                    view all results
-                  </span>
-                </button>
+                {isSearching ? (
+                  <div className="text-white text-center font-maladroit text-[18px]">
+                    Searching...
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {searchResults.slice(0, 3).map((item) => (
+                        <ProductItem
+                          key={item.id}
+                          title={item.name}
+                          price={parseFloat(item.price)}
+                          image={`http://185.235.241.248:5000/${item.img}`}
+                          isBlack={false}
+                        />
+                      ))}
+                    </div>
+                    {searchResults.length > 3 && (
+                      <button className="py-3 px-5 border-[3px] border-black max-w-[337px] w-full bg-white mx-auto">
+                        <span className="font-maladroit text-[18px] font-bold text-black">
+                          view all results
+                        </span>
+                      </button>
+                    )}
+                  </>
+                ) : searchTerm.length > 0 ? (
+                  <div className="text-white text-center font-maladroit text-[18px]">
+                    No products found
+                  </div>
+                ) : null}
               </div>
             </div>
           </motion.div>

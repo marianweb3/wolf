@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface SizeSelectionProps {
   handleChange: (selectedSize: string | null) => void;
@@ -6,8 +6,11 @@ interface SizeSelectionProps {
 }
 
 const ProductSizeSelection = ({ handleChange, sizes }: SizeSelectionProps) => {
+  const sizesDefault = ["XS", "S", "M", "L", "XL", "XXL"];
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-
+  const [availableSize, setAvailableSize] = useState(
+    sizes.length > 0 ? sizes : sizesDefault
+  );
   const handleSizeClick = (size: string) => {
     const newSelectedSize = size === selectedSize ? null : size;
     setSelectedSize(newSelectedSize);
@@ -16,7 +19,7 @@ const ProductSizeSelection = ({ handleChange, sizes }: SizeSelectionProps) => {
 
   return (
     <div className="grid grid-cols-2 2xl:grid-cols-3 gap-2">
-      {sizes.map((size) => (
+      {availableSize.map((size) => (
         <button
           key={size}
           onClick={() => handleSizeClick(size)}

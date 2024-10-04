@@ -26,7 +26,7 @@ const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
 const CategoryPage: React.FC = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
   const { data, error, isLoading } = useSWR<ApiResponse, Error>(
-    `${API}/api/device`,
+    `${API.api}/api/device`,
     fetcher
   );
 
@@ -72,7 +72,7 @@ const CategoryPage: React.FC = () => {
               key={item.id}
               title={item.name}
               price={parseFloat(item.price)}
-              image={`${API}/${item.img}`}
+              image={`${API.api}/${item.img}`}
               isBlack={true}
             />
           ))

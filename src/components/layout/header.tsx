@@ -78,7 +78,7 @@ const Header = () => {
         setIsSearching(true);
         try {
           const response = await fetch(
-            `${API}/api/products/search?name=${term}`
+            `${API.api}/api/products/search?name=${term}`
           );
           const data: Product[] | { message: string } = await response.json();
           if (Array.isArray(data)) {
@@ -309,7 +309,7 @@ const Header = () => {
                           key={item.id}
                           title={item.name}
                           price={parseFloat(item.price)}
-                          image={`${API}/${item.img}`}
+                          image={`${API.api}/${item.img}`}
                           isBlack={false}
                         />
                       ))}

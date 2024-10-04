@@ -13,7 +13,7 @@ const fetcher = (url: string): Promise<any> =>
 
 const ShopByCategory: React.FC = () => {
   const { data, error, isLoading } = useSWR<Category[]>(
-    `${API}/api/type`,
+    `${API.api}/api/type`,
     fetcher
   );
 
@@ -31,7 +31,7 @@ const ShopByCategory: React.FC = () => {
           {data?.map((category) => (
             <CategoryCard
               key={category.id}
-              image={`${API}/${category.prewiewImg}`}
+              image={`${API.api}/${category.prewiewImg}`}
               text={category.name}
               bgColor="#FA51FF"
               link="/products"

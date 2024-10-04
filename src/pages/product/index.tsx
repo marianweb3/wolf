@@ -38,7 +38,7 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`${API}/api/device?type=1`);
+        const response = await fetch(`${API.api}/api/device?type=1`);
         const data = await response.json();
         setProduct(data.rows[0]); // Assuming we're displaying the first product
       } catch (error) {
@@ -74,7 +74,7 @@ const ProductPage = () => {
             images={[
               {
                 id: 1,
-                src: `${API}/${product.img}`,
+                src: `${API.api}/${product.img}`,
                 alt: product.name,
               },
             ]}

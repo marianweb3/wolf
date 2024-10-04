@@ -38,7 +38,7 @@ const ProductPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `http://185.235.241.248:5000/api/device?type=1`
+          `https://185.235.241.248:5000/api/device?type=1`
         );
         const data = await response.json();
         setProduct(data.rows[0]); // Assuming we're displaying the first product
@@ -75,7 +75,7 @@ const ProductPage = () => {
             images={[
               {
                 id: 1,
-                src: `http://185.235.241.248:5000/${product.img}`,
+                src: `https://185.235.241.248:5000/${product.img}`,
                 alt: product.name,
               },
             ]}

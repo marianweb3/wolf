@@ -77,7 +77,7 @@ const Header = () => {
         setIsSearching(true);
         try {
           const response = await fetch(
-            `https://185.235.241.248:5000/api/products/search?name=${term}`
+            `http://185.235.241.248:5000/api/products/search?name=${term}`
           );
           const data: Product[] | { message: string } = await response.json();
           if (Array.isArray(data)) {
@@ -308,7 +308,7 @@ const Header = () => {
                           key={item.id}
                           title={item.name}
                           price={parseFloat(item.price)}
-                          image={`https://185.235.241.248:5000/${item.img}`}
+                          image={`http://185.235.241.248:5000/${item.img}`}
                           isBlack={false}
                         />
                       ))}

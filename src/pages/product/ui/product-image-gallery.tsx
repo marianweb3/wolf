@@ -1,30 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-const ProductImageGallery = () => {
-  const images = [
-    {
-      id: 1,
-      src: "/clothes/t-shirt.png",
-      alt: "Main product image",
-    },
-    {
-      id: 2,
-      src: "/clothes/product-t-shirt.png",
-      alt: "Side product image 1",
-    },
-    {
-      id: 3,
-      src: "/clothes/product-t-shirt.png",
-      alt: "Side product image 2",
-    },
-    {
-      id: 4,
-      src: "/clothes/product-t-shirt.png",
-      alt: "Side product image 3",
-    },
-  ];
+interface Image {
+  id: number;
+  src: string;
+  alt: string;
+}
 
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+interface ProductImageGalleryProps {
+  images: Image[];
+}
+
+const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
+  images,
+}) => {
+  const [selectedImage, setSelectedImage] = useState<Image>(images[0]);
 
   return (
     <div className="flex gap-5 w-full mt-[25px] lg:flex-row flex-col xl:max-w-[792px] 2xl:max-w-[936px] shrink-0 2xl:items-normal items-start">

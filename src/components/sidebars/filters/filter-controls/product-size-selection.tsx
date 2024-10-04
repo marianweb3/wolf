@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 interface SizeSelectionProps {
   handleChange: (selectedSize: string | null) => void;
+  sizes: string[];
 }
 
-const ProductSizeSelection = ({ handleChange }: SizeSelectionProps) => {
-  const sizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const ProductSizeSelection = ({ handleChange, sizes }: SizeSelectionProps) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   const handleSizeClick = (size: string) => {

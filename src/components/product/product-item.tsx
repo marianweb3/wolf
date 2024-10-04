@@ -1,18 +1,21 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-interface CarouselItemProps {
+interface ProductItemProps {
   title: string;
-  price: string;
+  price: number;
   image: string;
   isBlack?: boolean;
+  onBuy?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const ProductItem = ({
+const ProductItem: React.FC<ProductItemProps> = ({
   title,
   price,
   image,
   isBlack = false,
-}: CarouselItemProps) => {
+  onBuy,
+}) => {
   const textColor = isBlack ? "text-black" : "text-white";
   const borderColor = isBlack ? "border-black" : "border-white";
 
@@ -42,8 +45,14 @@ const ProductItem = ({
           <span
             className={`font-maladroit ${textColor} font-bold text-[18px] leading-[22.64px]`}
           >
-            {price}
+            {price} USDT
           </span>
+          <button
+            onClick={onBuy}
+            className="font-maladroit text-white font-bold text-[18px] leading-[22.64px] bg-black py-2 px-4 mt-2"
+          >
+            Buy
+          </button>
         </div>
       </div>
     </Link>

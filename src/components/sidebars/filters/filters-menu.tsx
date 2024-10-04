@@ -70,7 +70,7 @@ const FiltersMenu = () => {
             <ProductColorSelection handleChange={handleColorChange} />
           </FilterItem>
           <FilterItem label="SIZE">
-            <ProductSizeSelection handleChange={handleSizeChange} />
+            <ProductSizeSelection handleChange={handleSizeChange} sizes={[]} />
           </FilterItem>
         </div>
       </div>

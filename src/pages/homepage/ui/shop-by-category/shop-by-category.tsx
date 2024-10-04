@@ -1,6 +1,24 @@
 import CategoryCard from "./category-card";
+import useSWR from "swr";
 
-const ShopByCategory = () => {
+interface Category {
+  id: string;
+  name: string;
+  prewiewImg: string;
+}
+
+const fetcher = (url: string): Promise<any> =>
+  fetch(url).then((res) => res.json());
+
+const ShopByCategory: React.FC = () => {
+  const { data, error, isLoading } = useSWR<Category[]>(
+    "http://185.235.241.248:5000/api/type",
+    fetcher
+  );
+
+  if (error) return <div>Failed to load categories</div>;
+  if (isLoading) return <div>Loading categories...</div>;
+
   return (
     <section className="bg-[#FCE8FF] py-[150px] px-4 2xl:px-0">
       <div className="max-w-[1600px] mx-auto w-full">
@@ -9,30 +27,15 @@ const ShopByCategory = () => {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <CategoryCard
-            image="/categories/apparel.png"
-            text="Apparel"
-            bgColor="#FA51FF"
-            link="/products"
-          />
-          <CategoryCard
-            image="/categories/tech-gear.png"
-            text="Tech Gear"
-            bgColor="#000000"
-            link="/products"
-          />
-          <CategoryCard
-            image="/categories/artwork.png"
-            text="Artwork"
-            bgColor="#FFFAED"
-            link="/products"
-          />
-          <CategoryCard
-            image="/categories/accessories.png"
-            text="Accessories"
-            bgColor="#FFD85A"
-            link="/products"
-          />
+          {data?.map((category) => (
+            <CategoryCard
+              key={category.id}
+              image={`http://185.235.241.248:5000/${category.prewiewImg}`}
+              text={category.name}
+              bgColor="#FA51FF"
+              link="/products"
+            />
+          ))}
         </div>
       </div>
     </section>

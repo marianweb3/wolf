@@ -1,13 +1,33 @@
+import React from "react";
+import useSWR from "swr";
 import Breadcrumb from "@/components/common/breadcrumb";
 import Layout from "@/components/layout/layout";
 import ProductItem from "@/components/product/product-item";
 import FiltersMenu from "@/components/sidebars/filters/filters-menu";
 import useFiltersStore from "@/store/filtersStore";
 
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  img: string;
+}
+
+interface ApiResponse {
+  count: number;
+  rows: Product[];
+}
+
+const fetcher = (...args: [string]) => fetch(...args).then((res) => res.json());
+
 const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
 
-const CategoryPage = () => {
+const CategoryPage: React.FC = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
+  const { data, error, isLoading } = useSWR<ApiResponse, Error>(
+    "http://185.235.241.248:5000/api/device",
+    fetcher
+  );
 
   return (
     <Layout>
@@ -41,41 +61,24 @@ const CategoryPage = () => {
       </div>
       <FiltersMenu />
       <div className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 gap-y-10 mb-[200px] 2xl:px-0 px-4">
-        {items.map((item, index) => (
-          <ProductItem
-            key={index}
-            title={item.title}
-            price={item.price}
-            image={item.image}
-            isBlack={true}
-          />
-        ))}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : error ? (
+          <div>Error loading products</div>
+        ) : (
+          data?.rows.map((item) => (
+            <ProductItem
+              key={item.id}
+              title={item.name}
+              price={parseFloat(item.price)}
+              image={`http://185.235.241.248:5000/${item.img}`}
+              isBlack={true}
+            />
+          ))
+        )}
       </div>
     </Layout>
   );
 };
 
 export default CategoryPage;
-
-const items = [
-  {
-    title: "Land Wolf Hoodies",
-    price: "135 USDT",
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Wolf Socks",
-    price: "50 USDT",
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Wolf T-Shirt",
-    price: "80 USDT",
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Land Wolf Hoodie 2",
-    price: "150 USDT",
-    image: "/clothes/t-shirt.png",
-  },
-];

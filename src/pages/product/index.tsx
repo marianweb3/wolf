@@ -52,7 +52,9 @@ const ProductPage = () => {
   const { title } = useParams();
   // const navigate = useNavigate();
 
-  const { quantity, setQuantity, selectedSize, selectedColor } = useCartStore();
+  const { quantity, setQuantity, selectedSize, selectedColor, addToCart } =
+    useCartStore();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { data: product, error }: { data: Product; error: Error | undefined } =
     useSWR(`${API.api}/api/device/${title}`, fetcher);
@@ -64,15 +66,24 @@ const ProductPage = () => {
   // );
 
   const addToCartHandler = () => {
-    // Set Cart Object with selected color , size, quantity , its title and price
-    console.log({
-      img: product.images?.at(0)?.imagePath,
+    if (!selectedColor) {
+      setErrorMessage("Please select a color before adding to cart.");
+      return;
+    }
+    if (!selectedSize) {
+      setErrorMessage("Please select a size before adding to cart.");
+      return;
+    }
+
+    addToCart({
+      img: product.images?.at(0)?.imagePath || "",
       title: product.name,
       price: product.price,
-      selectedSize: selectedSize,
-      selectedColor: selectedColor,
-      quantity: quantity,
+      selectedSize,
+      selectedColor,
+      quantity,
     });
+    setErrorMessage(null);
   };
 
   if (error) {
@@ -136,6 +147,11 @@ const ProductPage = () => {
                 max={10}
               />
             </div>
+            {errorMessage && (
+              <p className="text-red-500 font-maladroit text-[14px] sm:text-[16px] font-bold">
+                {errorMessage}
+              </p>
+            )}
 
             <button
               className="py-3 px-5 w-full bg-black"

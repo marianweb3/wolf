@@ -1,83 +1,71 @@
-import NumberControl from "@/components/common/form/number-control";
 import React from "react";
+import NumberControl from "@/components/common/form/number-control";
+import { API } from "@/utils/api";
 
 interface CartItemProps {
-  name: string;
-  size: string;
-  price: number;
-  salePrice?: number;
-  imageUrl: string;
-  isOutOfStock?: boolean;
+  img: string;
+  title: string;
+  price: string;
+  selectedSize: string;
+  selectedColor: string;
   quantity: number;
   onIncrease: () => void;
   onDecrease: () => void;
   onRemove: () => void;
 }
 
-const CartItem = ({
-  name,
-  size,
+const CartItem: React.FC<CartItemProps> = ({
+  img,
+  title,
   price,
-  salePrice,
-  imageUrl,
-  isOutOfStock = false,
+  selectedSize,
+  selectedColor,
   quantity,
   onIncrease,
   onDecrease,
   onRemove,
-}: CartItemProps) => {
+}) => {
+  const numericPrice = parseFloat(price);
+  const isOutOfStock = quantity === 0;
+
+  const handleQuantityChange = (newValue: number) => {
+    if (newValue > quantity) {
+      onIncrease();
+    } else if (newValue < quantity) {
+      onDecrease();
+    }
+  };
+
   return (
     <div className="border-b-2 border-black py-4">
       <div className="flex items-start space-x-4">
         <div
-          className={`w-full max-w-[139px] h-[123px] flex-shrink-0 border border-black `}
+          className="w-full max-w-[139px] h-[123px] flex-shrink-0 border border-black"
           style={{ backgroundColor: "#e6f7ff" }}
         >
           <img
-            src={imageUrl}
-            alt={name}
+            src={`${API.api}/${img}`}
+            alt={title}
             className="w-full h-full object-cover"
           />
         </div>
 
         <div className="flex-grow flex flex-col gap-2">
           <div className="flex justify-between items-center">
-            <h3 className="font-saotorpes text-[18px] text-black">{name}</h3>
+            <h3 className="font-saotorpes text-[18px] text-black">{title}</h3>
             <div className="text-right">
-              {salePrice ? (
-                <div className="flex gap-2">
-                  <span className="relative text-[#000000] font-maladroit text-[20px] font-bold">
-                    ${price}{" "}
-                    <svg
-                      className="absolute top-1/2"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="46"
-                      height="4"
-                      viewBox="0 0 46 4"
-                      fill="none"
-                    >
-                      <path
-                        d="M2 2C15.9931 2.08089 29.9995 2.36873 44 2"
-                        stroke="#FF0000"
-                        stroke-width="3"
-                        stroke-linecap="round"
-                      />
-                    </svg>
-                  </span>
-                  <span className="text-[#FF0000] font-maladroit text-[20px] font-bold">
-                    ${salePrice}
-                  </span>
-                </div>
-              ) : (
-                <span className="font-bold font-maladroit text-[20px] leading-[25.16px]">
-                  ${price}
-                </span>
-              )}
+              <span className="font-bold font-maladroit text-[20px] leading-[25.16px]">
+                ${numericPrice.toFixed(2)}
+              </span>
             </div>
           </div>
 
           <div className="font-maladroit text-[18px] font-bold">
-            SIZE: {size}
+            SIZE: {selectedSize}
+          </div>
+
+          <div className="font-maladroit text-[18px] font-bold">
+            COLOR: {selectedColor}
           </div>
 
           {isOutOfStock ? (
@@ -88,8 +76,8 @@ const CartItem = ({
             <div className="flex items-center gap-6 mt-2">
               <NumberControl
                 value={quantity}
-                onChange={() => {}}
-                min={0}
+                onChange={handleQuantityChange}
+                min={1}
                 max={10}
               />
 

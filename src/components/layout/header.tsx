@@ -35,11 +35,10 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const { isOpen, toggleCart } = useCartStore();
+  const { isOpen, toggleCart, cartItems } = useCartStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearching, setIsSearching] = useState(false);
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -250,7 +249,7 @@ const Header = () => {
             />
           </div>
           <div
-            className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
+            className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer relative"
             onClick={toggleCart}
           >
             <img
@@ -258,6 +257,13 @@ const Header = () => {
               alt="Search"
               className="max-w-[25px] sm:max-w-full"
             />
+            {cartItems.length > 0 ? (
+              <div className="absolute -top-1 size-4 rounded-full bg-black grid place-content-center">
+                <span className="font-saotorpes text-[12px] font-bold text-[red]">
+                  {cartItems.length}
+                </span>
+              </div>
+            ) : null}
           </div>
         </div>
       </header>

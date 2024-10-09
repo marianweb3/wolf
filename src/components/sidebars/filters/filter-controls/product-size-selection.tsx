@@ -1,30 +1,21 @@
-import { useState } from "react";
+import useFiltersStore from "@/store/filtersStore";
 
-interface SizeSelectionProps {
-  handleChange: (selectedSize: string | null) => void;
-  sizes: string[];
-}
-
-const ProductSizeSelection = ({ handleChange, sizes }: SizeSelectionProps) => {
+const ProductSizeSelection = () => {
   const sizesDefault = ["XS", "S", "M", "L", "XL", "XXL"];
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [availableSize, setAvailableSize] = useState(
-    sizes.length > 0 ? sizes : sizesDefault
-  );
+  const { selectedSizes, toggleSize } = useFiltersStore();
+
   const handleSizeClick = (size: string) => {
-    const newSelectedSize = size === selectedSize ? null : size;
-    setSelectedSize(newSelectedSize);
-    handleChange(newSelectedSize);
+    toggleSize(size);
   };
 
   return (
     <div className="grid grid-cols-2 2xl:grid-cols-3 gap-2">
-      {availableSize.map((size) => (
+      {sizesDefault.map((size) => (
         <button
           key={size}
           onClick={() => handleSizeClick(size)}
           className={`border-2 border-black py-4 font-saotorpes text-[16px] leading-[14.94px] ${
-            selectedSize === size ? "bg-black text-white" : ""
+            selectedSizes.includes(size) ? "bg-black text-white" : ""
           }`}
         >
           {size}

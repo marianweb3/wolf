@@ -122,3 +122,30 @@ input[type="range"]::-moz-range-thumb {
 .wallet-adapter-dropdown {
   flex-shrink: 0;
 }
+
+/* Gradient Range Slider */
+#range-slider-gradient {
+  position: relative;
+  display: flex;
+  height: 15px;
+  border-radius: 12px;
+  background: #000;
+}
+
+#range-slider-gradient .range-slider__thumb {
+  background: white;
+  width: 15px;
+  height: 15px;
+}
+
+#range-slider-gradient .range-slider__thumb[data-lower] {
+  border: 1px solid #0073e6;
+}
+
+#range-slider-gradient .range-slider__thumb[data-upper] {
+  border: 1px solid #e469ff;
+}
+
+#range-slider-gradient .range-slider__range {
+  background: linear-gradient(to right, #0073e6, #e469ff);
+}

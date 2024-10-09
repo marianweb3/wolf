@@ -22,16 +22,11 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import { config } from "../../../../config";
-
-interface CarouselItem {
-  title: string;
-  price: number;
-  image: string;
-}
+import { Product } from "@/pages/product";
 
 interface ClothingCollectionProps {
   title: string;
-  items: CarouselItem[];
+  items: Product[];
   backgroundImage?: string;
   buttonLabel?: string;
   buttonAction?: () => void;
@@ -175,9 +170,9 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
               className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-1 px-2" // Adjust width based on viewport size
             >
               <ProductItem
-                title={item.title}
-                price={item.price}
-                image={item.image}
+                title={item.name}
+                price={parseFloat(item.price)}
+                image={item.images?.at(0)}
                 onBuy={onBuy}
               />
             </div>

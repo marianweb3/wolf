@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-
-interface Image {
-  id: number;
-  src: string;
-  alt: string;
-}
+import { Image } from "@/pages/product";
+import { API } from "@/utils/api";
 
 interface ProductImageGalleryProps {
   images: Image[];
@@ -24,7 +20,11 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
             className="size-[115px] cursor-pointer  border-2 border-black"
             onClick={() => setSelectedImage(image)}
           >
-            <img src={image.src} alt={image.alt} className="object-cover" />
+            <img
+              src={`${API.api}/${image.imagePath}`}
+              alt={image.imagePath}
+              className="object-cover"
+            />
           </div>
         ))}
       </div>
@@ -32,8 +32,8 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
       {/* Main image */}
       <div className="w-full flex justify-center items-center bg-blue-100">
         <img
-          src={selectedImage.src}
-          alt={selectedImage.alt}
+          src={`${API.api}/${selectedImage.imagePath}`}
+          alt={selectedImage.imagePath}
           className="max-w-[783px] w-full aspect-square"
         />
       </div>

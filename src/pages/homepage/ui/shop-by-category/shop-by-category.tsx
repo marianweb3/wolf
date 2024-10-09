@@ -34,7 +34,7 @@ const ShopByCategory: React.FC = () => {
               image={`${API.api}/${category.prewiewImg}`}
               text={category.name}
               bgColor="#FA51FF"
-              link="/products"
+              link={`/products/${category.name.split(" ").join("-")}`}
             />
           ))}
         </div>

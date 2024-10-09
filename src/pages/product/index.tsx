@@ -11,43 +11,57 @@ import Layout from "@/components/layout/layout";
 import { useEffect, useState } from "react";
 import ProductImageGallery from "./ui/product-image-gallery";
 import ClothingCollection from "../homepage/ui/clothing-collection/clothing-collection";
-import { items } from "../homepage";
 import { useParams } from "react-router-dom";
 import { API } from "@/utils/api";
+import useSWR from "swr";
+import { useNavigate } from "react-router-dom";
 
 const breadcrumbItems = [
   { label: "Home", link: "/" },
   { label: "The real landwolf" },
 ];
 
-interface Product {
+export interface Image {
+  id: number;
+  imagePath: string;
+}
+
+export interface Size {
+  id: number;
+  value: string;
+}
+
+export interface Color {
+  id: number;
+  value: string;
+}
+
+export interface Product {
   id: number;
   name: string;
   price: string;
-  size: string;
-  img: string;
+  sizes: Size[];
+  images: Image[];
+  colors: Color[];
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const ProductPage = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
+  const { title } = useParams();
+  const navigate = useNavigate();
   const [selectedColorId, setSelectedColorId] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [count, setCount] = useState<number>(1);
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`${API.api}/api/device?type=1`);
-        const data = await response.json();
-        setProduct(data.rows[0]); // Assuming we're displaying the first product
-      } catch (error) {
-        console.error("Error fetching product:", error);
-      }
-    };
+  const { data: product, error }: { data: Product; error: Error | undefined } =
+    useSWR(`${API.api}/api/device/${title}`, fetcher);
 
-    fetchProduct();
-  }, [id]);
+  // Fetch apparel items
+  const { data: apparelData, error: apparelError } = useSWR(
+    `${API.api}/api/device?typeName=apparel`,
+    fetcher
+  );
 
   const handleColorChange = (selectedId: string | null) => {
     setSelectedColorId(selectedId);
@@ -57,28 +71,22 @@ const ProductPage = () => {
     setSelectedSize(size);
   };
 
-  const handleButtonClick = () => {
-    console.log("View all clothes clicked");
-  };
+  if (error) {
+    return <div>Error fetching product</div>;
+  }
 
   if (!product) {
     return <div>Loading...</div>;
   }
+
+  console.log(product);
 
   return (
     <Layout>
       <div className="pt-[91px] max-w-[1600px] mx-auto w-full mb-[130px] px-4 2xl:px-0">
         <Breadcrumb items={breadcrumbItems} />
         <div className="w-full gap-10 2xl:gap-[69px] flex xl:flex-row flex-col">
-          <ProductImageGallery
-            images={[
-              {
-                id: 1,
-                src: `${API.api}/${product.img}`,
-                alt: product.name,
-              },
-            ]}
-          />
+          <ProductImageGallery images={product.images} />
 
           <div className="xl:max-w-[585px] w-full md:py-6 flex flex-col gap-4 md:gap-8">
             <div className="w-full flex items-center justify-between">
@@ -94,7 +102,9 @@ const ProductPage = () => {
               {product.price} USDT
             </span>
 
-            <ProductColorSelection handleChange={handleColorChange} />
+            <ProductColorSelection
+            // handleChange={handleColorChange}
+            />
 
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between">
@@ -109,8 +119,8 @@ const ProductPage = () => {
                 </div>
               </div>
               <ProductSizeSelection
-                handleChange={handleSizeChange}
-                sizes={[product.size]}
+              // handleChange={handleSizeChange}
+              // sizes={product.sizes}
               />
             </div>
 
@@ -162,10 +172,10 @@ const ProductPage = () => {
 
       <ClothingCollection
         title="You Might Also Like"
-        items={items}
+        items={apparelData}
         backgroundImage="/product-black-bg.webp"
         buttonLabel="All clothes"
-        buttonAction={handleButtonClick}
+        buttonAction={() => navigate("/products/apparel")}
       />
 
       <div className="bg-[#D7B8E7]">

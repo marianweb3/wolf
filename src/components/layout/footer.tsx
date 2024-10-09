@@ -1,9 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   // Create a reference for the car image
   const carRef = useRef(null);
+  const navigate = useNavigate(); // Initialize the navigate function
 
   // Use the inView hook to detect when the car comes into view
   const isInView = useInView(carRef, { once: true });
@@ -53,16 +55,28 @@ const Footer = () => {
                 Shop
               </h4>
               <div className="flex flex-col gap-4">
-                <span className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white">
+                <span
+                  onClick={() => navigate("/products/apparel")}
+                  className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white cursor-pointer hover:text-gray-500 transition-colors"
+                >
                   Apparel
                 </span>
-                <span className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white">
+                <span
+                  onClick={() => navigate("/products/tech-gear")}
+                  className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white cursor-pointer hover:text-gray-500 transition-colors"
+                >
                   Tech Gear
                 </span>
-                <span className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white">
+                <span
+                  onClick={() => navigate("/products/antwork")}
+                  className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white cursor-pointer hover:text-gray-500 transition-colors"
+                >
                   artwork
                 </span>
-                <span className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white">
+                <span
+                  onClick={() => navigate("/products/accessories")}
+                  className="font-maladroit font-bold text-[16px] leading-[20.13px] text-white cursor-pointer hover:text-gray-500 transition-colors"
+                >
                   Accessories
                 </span>
               </div>

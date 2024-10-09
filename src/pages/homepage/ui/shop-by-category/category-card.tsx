@@ -17,7 +17,7 @@ const CategoryCard = ({ image, text, bgColor, link }: CategoryCardProps) => {
       <img
         src={image}
         alt={text}
-        className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" // Added `group-hover:scale-105` for scaling effect
+        className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-300  scale-[1.01] group-hover:scale-105" // Added `group-hover:scale-105` for scaling effect
       />
       <Link to={link}>
         <div className="py-4 md:py-[21.5px] px-6 bg-white border-2 border-l-0 border-b-0 border-black absolute bottom-0 left-0 flex items-center gap-6">

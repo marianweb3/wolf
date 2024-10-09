@@ -3,28 +3,51 @@ import Banner from "./ui/banner/banner";
 import ClothingCollection from "./ui/clothing-collection/clothing-collection";
 import NewsUpdatesSection from "./ui/news-update-section/news-update-section";
 import ShopByCategory from "./ui/shop-by-category/shop-by-category";
+import { useNavigate } from "react-router-dom";
+import useSWR from "swr";
+import { API } from "@/utils/api"; // Import your API utility
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const HomePage = () => {
-  const handleButtonClick = () => {
-    console.log("View all clothes clicked");
-  };
+  const navigate = useNavigate(); // Initialize the navigate function
+
+  // Fetch apparel items
+  const { data: apparelData, error: apparelError } = useSWR(
+    `${API.api}/api/device?typeName=apparel`,
+    fetcher
+  );
+
+  // Fetch tech gear items
+  const { data: techGearData, error: techGearError } = useSWR(
+    `${API.api}/api/device?typeName=tech gear`, // Adjust the type as per your API structure
+    fetcher
+  );
+
+  // Handle errors or loading states
+  if (apparelError || techGearError) return <div>Error loading items</div>;
+  if (!apparelData || !techGearData) return <div>Loading...</div>;
+
+  const apparel_items = apparelData.rows || [];
+  const tech_gear_items = techGearData.rows || [];
+
   return (
     <Layout>
       <Banner />
       <ClothingCollection
-        title="T-SHIRTS"
-        items={items}
+        title="APPAREL"
+        items={apparel_items}
         backgroundImage="/black-bg.webp"
         buttonLabel="All clothes"
-        buttonAction={handleButtonClick}
+        buttonAction={() => navigate("/products/apparel")}
       />
       <ShopByCategory />
       <ClothingCollection
-        title="T-SHIRTS"
-        items={items}
+        title="TECH GEAR"
+        items={tech_gear_items}
         backgroundImage="/black-bg.webp"
         buttonLabel="All clothes"
-        buttonAction={handleButtonClick}
+        buttonAction={() => navigate("/products/tech-gear")}
       />
       <NewsUpdatesSection />
     </Layout>
@@ -32,26 +55,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-export const items = [
-  {
-    title: "Land Wolf Hoodies",
-    price: 1,
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Wolf Socks",
-    price: 135,
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Wolf T-Shirt",
-    price: 135,
-    image: "/clothes/t-shirt.png",
-  },
-  {
-    title: "Land Wolf Hoodie 2",
-    price: 135,
-    image: "/clothes/t-shirt.png",
-  },
-];

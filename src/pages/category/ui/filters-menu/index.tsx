@@ -1,25 +1,57 @@
 import useFiltersStore from "@/store/filtersStore";
 import { motion } from "framer-motion";
 import { IoCloseCircleSharp } from "react-icons/io5";
-import FilterItem from "./filter-item";
-import ProductColorSelection from "./filter-controls/product-color-selection";
-import { useState } from "react";
-import ProductSizeSelection from "./filter-controls/product-size-selection";
+import FilterItem from "../../../../components/sidebars/filters/filter-item";
+import ProductColorSelection from "../../../../components/sidebars/filters/filter-controls/product-color-selection";
+import { ChangeEvent } from "react";
+import ProductSizeSelection from "../../../../components/sidebars/filters/filter-controls/product-size-selection";
+import PriceRangeFilter from "@/pages/category/ui/filters-menu/price-range-filter";
 
 const FiltersMenu = () => {
-  const { isOpen, toggleMenu } = useFiltersStore();
-  const [selectedColorId, setSelectedColorId] = useState<string | null>(null);
+  const {
+    isOpen,
+    toggleMenu,
+    selectedColors,
+    selectedSizes,
+    minPrice,
+    maxPrice,
+    setMinPrice,
+    setMaxPrice,
+  } = useFiltersStore();
 
-  const handleColorChange = (selectedId: string | null) => {
-    setSelectedColorId(selectedId);
+  const setFilters = useFiltersStore((state) => state.setFilters);
+
+  const handleMinPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0; // Handle NaN case
+    setMinPrice(value);
   };
 
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-
-  const handleSizeChange = (size: string | null) => {
-    setSelectedSize(size);
-    console.log("Selected Size:", size);
+  const handleMaxPriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = parseFloat(e.target.value) || 0; // Handle NaN case
+    setMaxPrice(value);
   };
+
+  // Handler to apply filters
+  const handleApplyFilters = () => {
+    const filters = {
+      minPrice,
+      maxPrice,
+      selectedSizes,
+      selectedColors,
+    };
+
+    setFilters(filters);
+  };
+
+  // console.log(
+  //   "zustand store",
+  //   minPrice,
+  //   maxPrice,
+  //   selectedColors,
+  //   selectedSizes,
+  //   sortOption
+  // );
+
   return (
     <motion.div
       className="fixed top-0 left-0 border-r-2 border-black w-full h-full bg-white z-50 max-w-[549px] flex flex-col justify-between p-8"
@@ -38,18 +70,15 @@ const FiltersMenu = () => {
         </div>
         <div>
           <FilterItem label="PRICE">
-            <div className="wrapper mb-6 mt-4s">
-              <div className="range">
-                <input type="range" />
-              </div>
-            </div>
-
+            <PriceRangeFilter />
             <div className="flex items-center gap-4">
               <div className="px-5 py-4 bg-white grow border-2 flex border-black items-center justify-between">
-                <img src="/cryptocurrency_usdt.svg" alt="" />
+                <img src="/public/cryptocurrency_usdt.svg" alt="" />
                 <input
                   type="text"
                   placeholder="0"
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
                   className="bg-transparent border-none text-[24px] leading-[30.19px] font-maladroit text-[#00000066] max-w-[100px] outline-none text-right"
                 />
               </div>
@@ -57,25 +86,30 @@ const FiltersMenu = () => {
                 to
               </span>
               <div className="px-5 py-4 bg-white grow border-2 flex border-black items-center justify-between">
-                <img src="/cryptocurrency_usdt.svg" alt="" />{" "}
+                <img src="/public/cryptocurrency_usdt.svg" alt="" />{" "}
                 <input
                   type="text"
                   placeholder="17.000"
+                  value={maxPrice}
+                  onChange={handleMaxPriceChange}
                   className="bg-transparent border-none text-[24px] leading-[30.19px] font-maladroit text-[#00000066] max-w-[100px] outline-none text-right"
                 />
               </div>
             </div>
           </FilterItem>
           <FilterItem label="COLOR">
-            <ProductColorSelection handleChange={handleColorChange} />
+            <ProductColorSelection />
           </FilterItem>
           <FilterItem label="SIZE">
-            <ProductSizeSelection handleChange={handleSizeChange} sizes={[]} />
+            <ProductSizeSelection />
           </FilterItem>
         </div>
       </div>
       <div className="w-full">
-        <button className="w-full bg-black text-white py-3 text-[18px] leading-[22.64px] font-maladroit">
+        <button
+          onClick={handleApplyFilters}
+          className="w-full bg-black text-white py-3 text-[18px] leading-[22.64px] font-maladroit"
+        >
           SET ITEMS
         </button>
       </div>

@@ -21,11 +21,11 @@ interface Product {
 }
 
 const menuItems = [
-  { label: "Apparel", href: "/products" },
+  { label: "Apparel", href: "/products/apparel" },
   // { label: "Apparel", href: "/apparel" },
-  { label: "Accessories", href: "/accessories" },
-  { label: "Artwork", href: "/artwork" },
-  { label: "Tech Gear", href: "/tech-gear" },
+  { label: "Accessories", href: "/products/accessories" },
+  { label: "Artwork", href: "/products/artwork" },
+  { label: "Tech Gear", href: "/products/tech-gear" },
 ];
 interface SearchResponse {
   message?: string;
@@ -304,15 +304,15 @@ const Header = () => {
                 ) : searchResults.length > 0 ? (
                   <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {searchResults.slice(0, 3).map((item) => (
-                        <ProductItem
-                          key={item.id}
-                          title={item.name}
-                          price={parseFloat(item.price)}
-                          image={`${API.api}/${item.img}`}
-                          isBlack={false}
-                        />
-                      ))}
+                      {/*{searchResults.slice(0, 3).map((item) => (*/}
+                      {/*  <ProductItem*/}
+                      {/*    key={item.id}*/}
+                      {/*    title={item.name}*/}
+                      {/*    price={parseFloat(item.price)}*/}
+                      {/*    image={`${API.api}/${item.img}`}*/}
+                      {/*    isBlack={false}*/}
+                      {/*  />*/}
+                      {/*))}*/}
                     </div>
                     {searchResults.length > 3 && (
                       <button className="py-3 px-5 border-[3px] border-black max-w-[337px] w-full bg-white mx-auto">

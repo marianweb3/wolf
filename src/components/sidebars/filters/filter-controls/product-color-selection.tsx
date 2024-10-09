@@ -1,16 +1,10 @@
-import { useState } from "react";
+import useFiltersStore from "@/store/filtersStore";
 
-interface SvgSelectorProps {
-  handleChange: (selectedId: string | null) => void;
-}
-
-const ProductColorSelection = ({ handleChange }: SvgSelectorProps) => {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+const ProductColorSelection = () => {
+  const { selectedColors, toggleColor } = useFiltersStore();
 
   const handleSvgClick = (id: string) => {
-    const newSelectedId = id === selectedId ? null : id;
-    setSelectedId(newSelectedId);
-    handleChange(newSelectedId);
+    toggleColor(id);
   };
 
   return (
@@ -25,7 +19,7 @@ const ProductColorSelection = ({ handleChange }: SvgSelectorProps) => {
           fill="none"
           onClick={() => handleSvgClick(shape.id)}
           className={`cursor-pointer ${
-            selectedId === shape.id ? "opacity-100" : "opacity-50"
+            selectedColors.includes(shape.id) ? "opacity-100" : "opacity-50"
           }`}
         >
           <path d={shape.d} fill={shape.fill} stroke="black" strokeWidth="2" />
@@ -39,28 +33,28 @@ export default ProductColorSelection;
 
 const shapes = [
   {
-    id: "shape1",
+    id: "red",
     width: 111,
     height: 58,
     fill: "#D24646",
     d: "M109.75 54.1401V2.56718L1 1.01438V56.9736L109.75 54.1401Z",
   },
   {
-    id: "shape2",
+    id: "pink",
     width: 112,
     height: 58,
     fill: "#D125BF",
     d: "M1.75 3.85986V55.4328L110.5 56.9856V1.0264L1.75 3.85986Z",
   },
   {
-    id: "shape3",
+    id: "blue",
     width: 112,
     height: 58,
     fill: "#45DCF0",
     d: "M1.5 3.85986V55.4328L110.25 56.9856V1.0264L1.5 3.85986Z",
   },
   {
-    id: "shape4",
+    id: "green",
     width: 111,
     height: 58,
     fill: "#B8FF6D",

@@ -1,10 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Image } from "@/pages/product";
+import { API } from "@/utils/api";
 
 interface ProductItemProps {
   title: string;
   price: number;
-  image: string;
+  image: Image | undefined;
   isBlack?: boolean;
   onBuy?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -20,12 +22,15 @@ const ProductItem: React.FC<ProductItemProps> = ({
   const borderColor = isBlack ? "border-black" : "border-white";
 
   return (
-    <Link to="/product/1" className="shrink-0 grow-0 flex justify-center">
+    <Link
+      to={`/product/${title}`}
+      className="shrink-0 grow-0 flex justify-center"
+    >
       <div className="flex flex-col gap-4 max-w-[520px]">
         <div className="bg-[#8CE6FF] px-[18px] py-6 border-2 border-black aspect-square size-[520px]">
           <img
-            src={image}
-            alt={title}
+            src={`${API.api}/${image?.imagePath}`}
+            alt={image?.imagePath}
             className="object-cover h-full w-full "
           />
         </div>

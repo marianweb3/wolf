@@ -1,23 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { IoCloseSharp } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
-import ProductItem from "../product/product-item";
+import ProductItem from "../../product/product-item";
 import useCartStore from "@/store/cartStore";
 import { Link } from "react-router-dom";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import debounce from "lodash/debounce";
 import { API } from "@/utils/api";
+import SearchMenu from "@/components/layout/header/ui/search-menu";
+import { Product } from "@/pages/product";
+import useSearchStore from "@/store/searchStore";
+import useSWR from "swr";
+import debounce from "lodash/debounce";
 
 interface MenuItem {
   label: string;
   href: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  price: string;
-  img: string;
 }
 
 const menuItems = [
@@ -27,26 +23,50 @@ const menuItems = [
   { label: "Artwork", href: "/products/artwork" },
   { label: "Tech Gear", href: "/products/tech-gear" },
 ];
-interface SearchResponse {
-  message?: string;
-  rows?: Product[];
+
+export interface SearchResponse {
+  currentPage: number;
+  totalCount: number;
+  totalPages: number;
+  products: Product[];
 }
+
+const defaultValue = {
+  currentPage: 0,
+  products: [],
+  totalCount: 0,
+  totalPages: 0,
+};
+
+// Fetcher function for SWR
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch");
+  return response.json();
+};
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { isOpen, toggleCart, cartItems } = useCartStore();
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [debouncedTerm, setDebouncedTerm] = useState(searchTerm); // Store the debounced term
+
   const [isSearching, setIsSearching] = useState(false);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
     if (isSearchVisible) {
       setSearchTerm("");
-      setSearchResults([]);
     }
   };
+
+  const page = useSearchStore((state) => state.page);
+  const limit = useSearchStore((state) => state.limit);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -71,40 +91,30 @@ const Header = () => {
     };
   }, [isMenuOpen]);
 
+  // Debounce the search term
   const debouncedSearch = useCallback(
-    debounce(async (term: string) => {
-      if (term.length > 0) {
-        setIsSearching(true);
-        try {
-          const response = await fetch(
-            `${API.api}/api/products/search?name=${term}`
-          );
-          const data: Product[] | { message: string } = await response.json();
-          if (Array.isArray(data)) {
-            setSearchResults(data);
-          } else {
-            setSearchResults([]);
-          }
-        } catch (error) {
-          console.error("Error fetching search results:", error);
-          setSearchResults([]);
-        } finally {
-          setIsSearching(false);
-        }
-      } else {
-        setSearchResults([]);
-      }
+    debounce((value: string) => {
+      setDebouncedTerm(value);
     }, 300),
     []
   );
 
-  useEffect(() => {
-    debouncedSearch(searchTerm);
-  }, [searchTerm, debouncedSearch]);
-
+  // Update the search term without debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    debouncedSearch(e.target.value); // Apply debounce here
   };
+
+  // Construct the search URL
+  const searchUrl = debouncedTerm
+    ? `${API.api}/api/products/search?name=${debouncedTerm}&page=${page}&limit=${limit}`
+    : null;
+
+  // Use SWR hook for data fetching
+  const { data, error }: { data: SearchResponse; error: Error | undefined } =
+    useSWR(searchUrl, fetcher, {
+      revalidateOnFocus: false,
+    });
 
   return (
     <div>
@@ -284,65 +294,13 @@ const Header = () => {
             exit={{ opacity: 0, y: -50 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="bg-black py-8">
-              <div className="max-w-[1600px] mx-auto w-full flex flex-col gap-6">
-                <div className="flex items-center">
-                  <div className="flex items-center gap-4 w-full">
-                    <div className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center">
-                      <img
-                        src="/header/search.svg"
-                        alt="Search"
-                        className="max-w-[25px] sm:max-w-full"
-                      />
-                    </div>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 font-maladroit bg-transparent font-bold text-base md:text-[20px] placeholder:text-[#FFFFFF99] text-[#FFFFFF99] focus:outline-none transition-all duration-300 ease-in-out"
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      required
-                    />
-                  </div>
-                  <IoCloseSharp
-                    size={40}
-                    color="white"
-                    className="cursor-pointer"
-                    onClick={toggleSearch}
-                  />
-                </div>
-                {isSearching ? (
-                  <div className="text-white text-center font-maladroit text-[18px]">
-                    Searching...
-                  </div>
-                ) : searchResults.length > 0 ? (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {/*{searchResults.slice(0, 3).map((item) => (*/}
-                      {/*  <ProductItem*/}
-                      {/*    key={item.id}*/}
-                      {/*    title={item.name}*/}
-                      {/*    price={parseFloat(item.price)}*/}
-                      {/*    image={`${API.api}/${item.img}`}*/}
-                      {/*    isBlack={false}*/}
-                      {/*  />*/}
-                      {/*))}*/}
-                    </div>
-                    {searchResults.length > 3 && (
-                      <button className="py-3 px-5 border-[3px] border-black max-w-[337px] w-full bg-white mx-auto">
-                        <span className="font-maladroit text-[18px] font-bold text-black">
-                          view all results
-                        </span>
-                      </button>
-                    )}
-                  </>
-                ) : searchTerm.length > 0 ? (
-                  <div className="text-white text-center font-maladroit text-[18px]">
-                    No products found
-                  </div>
-                ) : null}
-              </div>
-            </div>
+            <SearchMenu
+              searchTerm={searchTerm}
+              handleSearchChange={handleSearchChange}
+              toggleSearch={toggleSearch}
+              isSearching={isSearching}
+              data={data}
+            />
           </motion.div>
         )}
       </AnimatePresence>

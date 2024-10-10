@@ -2,11 +2,12 @@ import { motion } from "framer-motion";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import useCartStore from "@/store/cartStore";
 import CartItem from "./cart-item";
-
+import { useNavigate } from "react-router-dom";
 const CartSideBar = () => {
   const { isOpen, toggleCart, cartItems, removeFromCart, updateItemQuantity } =
     useCartStore();
 
+  const navigate = useNavigate();
   const handleIncrease = (index: number) => {
     updateItemQuantity(index, cartItems[index].quantity + 1);
   };
@@ -63,8 +64,11 @@ const CartSideBar = () => {
             ${totalPrice.toFixed(2)}
           </span>
         </div>
-        <button className="w-full bg-black text-white py-3 text-[18px] leading-[22.64px] font-maladroit ">
-          SET ITEMS
+        <button
+          className="w-full bg-black text-white py-3 text-[18px] leading-[22.64px] font-maladroit "
+          onClick={() => navigate("/checkout")}
+        >
+          PROCEED
         </button>
       </div>
     </motion.div>

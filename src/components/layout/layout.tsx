@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import Header from "./header";
 import Footer from "./footer";
 import CartSideBar from "../sidebars/cart/cart-sidebar";
+import Header from "@/components/layout/header";
 
 interface LayoutProps {
   children: ReactNode;

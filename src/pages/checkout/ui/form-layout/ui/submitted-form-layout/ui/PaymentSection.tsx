@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import useOrderStore from "@/store/orderStore";
 import useCartStore from "@/store/cartStore";
+import {
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+  getAccount,
+  createAssociatedTokenAccountInstruction
+} from "@solana/spl-token";
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { WalletNotConnectedError, SignerWalletAdapterProps } from '@solana/wallet-adapter-base';
+import { Transaction, PublicKey, TransactionInstruction, Connection, SystemProgram, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
+import { config } from "../../../../../../../config";
 
 interface PaymentMethod {
   id: string;
@@ -24,6 +34,9 @@ const PaymentSection = () => {
   const navigate = useNavigate();
   const { setOrder, order } = useOrderStore();
   const { cartItems } = useCartStore();
+  const [busy, setBusy] = useState(false);
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction, signTransaction } = useWallet();
   // const [billingMatchesShipping, setBillingMatchesShipping] = useState(true);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<string>("");
@@ -32,13 +45,92 @@ const PaymentSection = () => {
     setSelectedPaymentMethod((prevId) => (prevId === id ? "" : id));
   };
 
-  const handleSubmit = () => {
-    // Handle payment submission logic here
-    // Navigate to /order-confirmed page
-    setOrder({ paymentType: selectedPaymentMethod, cartItems: cartItems });
-    // navigate("/order-confirmed");
-    console.log("Pay Now clicked");
+  // const handleSubmit = () => {
+  //   // Handle payment submission logic here
+  //   // Navigate to /order-confirmed page
+  //   setOrder({ paymentType: selectedPaymentMethod, cartItems: cartItems });
+  //   // navigate("/order-confirmed");
+  //   console.log("Pay Now clicked");
+  // };
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + parseFloat(item.price) * item.quantity,
+    0
+  );
+
+  const handleSubmit = async (e: any) => {
+
+    if(!publicKey){
+      alert("Pleas connect wallet");
+      return;
+    }
+
+    const amount = parseInt(totalPrice * 1000000);
+
+    try {
+
+      if (!publicKey || !signTransaction) throw new WalletNotConnectedError();
+
+      setBusy(true);
+
+      const recipientAddress = new PublicKey(config.contract);
+
+      const mintToken = new PublicKey(config.token);
+
+      const associatedTokenFrom = await getAssociatedTokenAddress(
+        mintToken,
+        publicKey
+      );
+
+      const fromAccount = await getAccount(connection, associatedTokenFrom);
+
+      const associatedTokenTo = await getAssociatedTokenAddress(
+        mintToken,
+        recipientAddress
+      );
+
+      const ins = createTransferInstruction(
+        fromAccount.address,
+        associatedTokenTo,
+        publicKey,
+        amount
+      )
+
+      const blockHash = await connection.getLatestBlockhash("processed");
+
+      const messageV0 = new TransactionMessage({
+        payerKey: publicKey,
+        recentBlockhash: blockHash.blockhash,
+        instructions: [ins],
+      }).compileToV0Message();
+
+      const versionedTransaction = new VersionedTransaction(messageV0);
+      const signature = await sendTransaction(versionedTransaction, connection);
+
+      await connection.confirmTransaction({
+        blockhash: blockHash.blockhash,
+        lastValidBlockHeight: blockHash.lastValidBlockHeight,
+        signature
+      });
+
+      const data = {
+        items: cartItems,
+        shipping: order.formValues,
+        total: totalPrice,
+        hash: signature
+      }
+
+      /// save 
+
+      setBusy(false);
+
+    } catch (err) {
+      console.log(err);
+      setBusy(false);
+    }
+
   };
+
 
   console.log(order);
   return (
@@ -95,7 +187,7 @@ const PaymentSection = () => {
       <div className={"w-full flex justify-end"}>
         <button
           onClick={handleSubmit}
-          disabled={!selectedPaymentMethod} // Disable if no payment method selected
+          disabled={!selectedPaymentMethod || busy} // Disable if no payment method selected
           className={clsx(
             `w-full md:max-w-[248px] py-[8px] md:py-[12px] px-[16px] md:px-[20px] bg-black text-white text-[14px] font-[700] font-maladroit transition-all`,
             "disabled:cursor-not-allowed disabled:bg-[rgba(0,0,0,0.20)] disabled:text-[#909090]"

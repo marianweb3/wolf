@@ -25,7 +25,7 @@ const App = () => {
   const network = WalletAdapterNetwork.Devnet;
 
   const endpoint =
-    "https://mainnet.helius-rpc.com/?api-key=783240ca-1ee5-431a-8e39-b5d465b87333"; //useMemo(() => clusterApiUrl(network), [network]);
+    "https://mainnet.helius-rpc.com/?api-key=b1ad9a3b-fdae-423a-8fcd-b1c2c03c3fcc"; //useMemo(() => clusterApiUrl(network), [network]);
 
   const wallets = useMemo(
     () => [

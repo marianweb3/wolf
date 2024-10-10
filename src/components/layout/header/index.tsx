@@ -4,6 +4,7 @@ import ProductItem from "../../product/product-item";
 import useCartStore from "@/store/cartStore";
 import { Link } from "react-router-dom";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet } from '@solana/wallet-adapter-react';
 import { API } from "@/utils/api";
 import SearchMenu from "@/components/layout/header/ui/search-menu";
 import { Product } from "@/pages/product";
@@ -50,6 +51,8 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const { isOpen, toggleCart, cartItems } = useCartStore();
+
+  const { publicKey } = useWallet();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState(searchTerm); // Store the debounced term
@@ -150,7 +153,7 @@ const Header = () => {
               </ul>
               <div className="block lg:hidden mt-10">
                 <WalletMultiButton className="connect-button ">
-                  Select Wallet
+                { !publicKey ? "Connect wallet" : ""}
                 </WalletMultiButton>
               </div>
             </nav>
@@ -251,7 +254,7 @@ const Header = () => {
         </div>
         <div className="hidden lg:flex w-auto mr-10">
           <WalletMultiButton className="connect-button">
-            Select Wallet
+          { !publicKey ? "Connect wallet" : ""}
           </WalletMultiButton>
         </div>
 

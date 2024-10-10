@@ -138,6 +138,11 @@ const Header = () => {
                   </li>
                 ))}
               </ul>
+              <div className="block lg:hidden mt-10">
+                <WalletMultiButton className="connect-button ">
+                  Select Wallet
+                </WalletMultiButton>
+              </div>
             </nav>
           ) : (
             // Desktop Header (Original Design)
@@ -166,7 +171,7 @@ const Header = () => {
                 <img
                   src="/wolfshop.webp"
                   alt="Wolf Shop"
-                  className="relative z-10 max-w-[220px] xl:max-w-[275px]"
+                  className="relative z-10 mt-[-10px] max-w-[220px] xl:max-w-[275px]"
                 />
               </Link>
 
@@ -226,18 +231,21 @@ const Header = () => {
               transform: "translate(-50%, -50%)",
             }}
           ></div>
-
-          <img
-            src="/wolfshop.webp"
-            alt="Wolf Shop"
-            className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
-          />
+          <Link to={"/"} className="relative">
+            <img
+              src="/wolfshop.webp"
+              alt="Wolf Shop"
+              className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
+            />
+          </Link>
         </div>
-        <WalletMultiButton className="connect-button">
-          Select Wallet
-        </WalletMultiButton>
+        <div className="hidden lg:flex w-auto mr-10">
+          <WalletMultiButton className="connect-button">
+            Select Wallet
+          </WalletMultiButton>
+        </div>
 
-        <div className="flex gap-3 min-[1680px]:absolute right-[160px]">
+        <div className="flex gap-3 min-[1680px]:absolute right-[250px]">
           <div
             className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
             onClick={toggleSearch}

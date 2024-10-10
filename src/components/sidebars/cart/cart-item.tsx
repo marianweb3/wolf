@@ -55,11 +55,14 @@ const CartItem: React.FC<CartItemProps> = ({
             <h3 className="font-saotorpes text-[18px] text-black">{title}</h3>
             <div className="text-right">
               <span className="font-bold font-maladroit text-[20px] leading-[25.16px]">
-                ${numericPrice.toFixed(2)}
+                ${quantity * numericPrice}
               </span>
             </div>
           </div>
 
+          <div className="font-maladroit text-[18px] font-bold">
+            Price: {numericPrice.toFixed(2)}
+          </div>
           <div className="font-maladroit text-[18px] font-bold">
             SIZE: {selectedSize}
           </div>

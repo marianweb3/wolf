@@ -50,7 +50,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ProductPage = () => {
   const { title } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { quantity, setQuantity, selectedSize, selectedColor, addToCart } =
     useCartStore();
@@ -59,12 +59,13 @@ const ProductPage = () => {
   const { data: product, error }: { data: Product; error: Error | undefined } =
     useSWR(`${API.api}/api/device/${title}`, fetcher);
 
-  // // Fetch apparel items
-  // const { data: apparelData, error: apparelError } = useSWR(
-  //   `${API.api}/api/device?typeName=apparel`,
-  //   fetcher
-  // );
+  // Fetch apparel items
+  const { data: apparelData, error: apparelError } = useSWR(
+    `${API.api}/api/device?typeName=apparel`,
+    fetcher
+  );
 
+  console.log("apparelData=", apparelData);
   const addToCartHandler = () => {
     if (!selectedColor) {
       setErrorMessage("Please select a color before adding to cart.");
@@ -190,13 +191,13 @@ const ProductPage = () => {
         </div>
       </div>
 
-      {/*<ClothingCollection*/}
-      {/*  title="You Might Also Like"*/}
-      {/*  items={apparelData}*/}
-      {/*  backgroundImage="/product-black-bg.webp"*/}
-      {/*  buttonLabel="All clothes"*/}
-      {/*  buttonAction={() => navigate("/products/apparel")}*/}
-      {/*/>*/}
+      <ClothingCollection
+        title="You Might Also Like"
+        items={apparelData?.rows}
+        backgroundImage="/product-black-bg.webp"
+        buttonLabel="All clothes"
+        buttonAction={() => navigate("/products/apparel")}
+      />
 
       <div className="bg-[#D7B8E7]">
         <div className="flex items-center 2xl:flex-row flex-col gap-10 pb-40 lg:pb-0">

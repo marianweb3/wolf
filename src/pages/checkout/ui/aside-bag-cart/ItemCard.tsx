@@ -1,15 +1,25 @@
 import React from "react";
+import { CartItem } from "@/store/cartStore";
+import { API } from "@/utils/api";
 
 interface ItemCardProps {
   className?: string;
+  item: CartItem;
 }
 
-const ItemCard = ({ className }: ItemCardProps) => {
-  const title = "the real lanwolf";
-  const size = "m";
-  const color = "white";
-  const qty = 1;
-  const price = 78;
+const ItemCard = ({ className, item }: ItemCardProps) => {
+  // const title = "the real lanwolf";
+  // const size = "m";
+  // const color = "white";
+  // const qty = 1;
+  // const price = 78;
+
+  const title = item.title;
+  const size = item.selectedSize;
+  const color = item.selectedColor;
+  const qty = item.quantity;
+  const price = item.price;
+  const image = item.img;
 
   return (
     <div className={`flex gap-[14px] py-[24px] ${className}`}>
@@ -19,8 +29,8 @@ const ItemCard = ({ className }: ItemCardProps) => {
         }
       >
         <img
-          src="/clothes/t-shirt-checkout.svg"
-          alt="shirt"
+          src={`${API.api}/${image}`}
+          alt={image}
           className={"w-full h-full"}
         />
       </div>

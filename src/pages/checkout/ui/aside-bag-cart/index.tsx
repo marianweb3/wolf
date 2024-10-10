@@ -18,8 +18,15 @@ export const ZeroConverter = ({ el }: { el: number }) => {
 };
 
 const AsideBagCart = () => {
-  const sub_total = 78;
-  const tax = 30;
+  const { cartItems } = useCartStore();
+
+  const totalPrice = cartItems.reduce(
+    (total, item) => total + parseFloat(item.price) * item.quantity,
+    0
+  );
+
+  const sub_total = totalPrice;
+  const tax = 0;
   const delivery = 0;
 
   const { isOpen, toggleCart } = useCartStore();
@@ -53,65 +60,83 @@ const AsideBagCart = () => {
         </div>
       </div>
 
-      {/*Subtotal*/}
-      <div
-        className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
-        }
-      >
-        <h3 className={"your_bag_text"}>SUBTOTAL</h3>
-        <div>
-          <h3 className={"your_bag_text"}>
-            <ZeroConverter el={sub_total} />
-          </h3>
+      {sub_total === 0 ? (
+        <div className="flex justify-center col-start-2 text-black w-full font-maladroit text-[18px]">
+          No Products Found
         </div>
-      </div>
+      ) : (
+        <>
+          {/*Subtotal*/}
+          <div
+            className={
+              "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
+            }
+          >
+            <h3 className={"your_bag_text"}>SUBTOTAL</h3>
+            <div>
+              <h3 className={"your_bag_text"}>
+                <ZeroConverter el={sub_total} />
+              </h3>
+            </div>
+          </div>
 
-      {/*Tax*/}
-      <div
-        className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
-        }
-      >
-        <h3 className={"your_bag_text"}>TAX%</h3>
-        <div>
-          <h3 className={"your_bag_text"}>
-            <ZeroConverter el={tax} />
-          </h3>
-        </div>
-      </div>
+          {/*Tax*/}
+          <div
+            className={
+              "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
+            }
+          >
+            <h3 className={"your_bag_text"}>TAX%</h3>
+            <div>
+              <h3 className={"your_bag_text"}>
+                <ZeroConverter el={tax} />
+              </h3>
+            </div>
+          </div>
 
-      {/*Delivery/Shipping*/}
+          {/*Delivery/Shipping*/}
 
-      <div
-        className={
-          "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
-        }
-      >
-        <h3 className={"your_bag_text"}>DELIVERY/SHIPPING</h3>
-        <div>
-          <h3 className={"your_bag_text"}>
-            <ZeroConverter el={delivery} />
-          </h3>
-        </div>
-      </div>
+          <div
+            className={
+              "flex justify-between border-t-2 border-[#0000004D] px-[8px] py-[8px] md:py-[12px]"
+            }
+          >
+            <h3 className={"your_bag_text"}>DELIVERY/SHIPPING</h3>
+            <div>
+              <h3 className={"your_bag_text"}>
+                <ZeroConverter el={delivery} />
+              </h3>
+            </div>
+          </div>
 
-      {/*Total*/}
+          {/*Total*/}
 
-      <div
-        className={
-          "flex justify-between border-y-2 border-black px-[8px] py-[8px] md:py-[12px]"
-        }
-      >
-        <h3 className={"your_bag_text"}>TOTAL</h3>
-        <div>
-          <h3 className={"your_bag_text"}>
-            <ZeroConverter el={sub_total + tax + delivery} />
-          </h3>
-        </div>
-      </div>
+          <div
+            className={
+              "flex justify-between border-y-2 border-black px-[8px] py-[8px] md:py-[12px]"
+            }
+          >
+            <h3 className={"your_bag_text"}>TOTAL</h3>
+            <div>
+              <h3 className={"your_bag_text"}>
+                <ZeroConverter el={sub_total + tax + delivery} />
+              </h3>
+            </div>
+          </div>
 
-      <ItemCard />
+          <div
+            className="flex flex-col py-[24px] gap-[20px] overflow-y-scroll"
+            style={{ maxHeight: "500px" }} // Adjust this height as necessary
+          >
+            {cartItems.map((item) => (
+              <ItemCard
+                item={item}
+                className={"!py-0 border-b-2 border-b-[#0000004D] !pb-[10px]"}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </aside>
   );
 };

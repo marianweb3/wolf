@@ -133,7 +133,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
         className="absolute w-full h-[120%] z-0 md:object-fill object-cover"
       />
 
-      {/* Header */}
+      {/* Index */}
       <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between relative px-4 lg:px-0">
         <h2 className="font-saotorpes text-[28px] sm:text-[36px] md:text-[48px] leading-[32px] md:leading-[36.34px] text-white">
           {title}
@@ -164,7 +164,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
 
       <div className="overflow-hidden w-full" ref={emblaRef}>
         <div className="flex gap-4">
-          {items.map((item, index) => (
+          {items?.map((item, index) => (
             <div
               key={index}
               className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-1 px-2" // Adjust width based on viewport size

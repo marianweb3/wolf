@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import CheckoutInput from "@/components/common/form/checkout-input";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import clsx from "clsx";
 import { FormValues } from "@/pages/checkout/ui/form-layout";
+import useOrderStore from "@/store/orderStore";
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("required*"),
@@ -30,21 +31,23 @@ const UnSubmittedForm = ({
   setSubmitted,
   formValues,
 }: UnSubmittedDeliveryFormProps) => {
+  const { setOrder } = useOrderStore();
+
   const handleSubmit = (
     values: FormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
-    console.log(values);
+    setOrder({ formValues: values });
     setFormValues(values); // Save form data
     setSubmitted(true); // Hide form and show summary
     setSubmitting(false);
   };
 
-  const [isAddressManually, setIsAddressManually] = useState(false);
+  // const [isAddressManually, setIsAddressManually] = useState(false);
 
-  const addressManuallyHandler = () => {
-    setIsAddressManually((prevState) => !prevState);
-  };
+  // const addressManuallyHandler = () => {
+  //   setIsAddressManually((prevState) => !prevState);
+  // };
 
   return (
     <Formik
@@ -53,7 +56,7 @@ const UnSubmittedForm = ({
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, isValid }) => (
         <Form className="flex flex-col gap-[18px] md:gap-[24px] mb-[24px]">
           <h1 className="font-saotorpes text-[30px] md:text-[40px] font-[400] leading-[100%] text-black">
             DELIVERY
@@ -79,36 +82,36 @@ const UnSubmittedForm = ({
 
           <CheckoutInput
             name={"address"}
-            placeholder={"START TYPING ADDRESS"}
+            placeholder={"STREET"}
             type={"text"}
           />
 
           {/*address manually button*/}
 
-          {isAddressManually ? (
-            <div className="flex flex-col md:flex-row gap-[18px] md:gap-[16px]">
-              <CheckoutInput name={"city"} placeholder={"CITY"} type={"text"} />
-              <CheckoutInput
-                name={"region"}
-                placeholder={"REGION"}
-                type={"text"}
-              />
-              <CheckoutInput
-                name={"postal_code"}
-                placeholder={"POSTAL CODE"}
-                type={"text"}
-              />
-            </div>
-          ) : (
-            <div className={"w-full flex justify-start"}>
-              <button
-                onClick={addressManuallyHandler}
-                className="font-maladroit font-[700] text-[14px] md:text-[16px] leading-[110%] text-black border-b border-black w-fit"
-              >
-                ENTER ADDRESS MANUALLY
-              </button>
-            </div>
-          )}
+          {/*{isAddressManually ? (*/}
+          <div className="flex flex-col md:flex-row gap-[18px] md:gap-[16px]">
+            <CheckoutInput name={"city"} placeholder={"CITY"} type={"text"} />
+            <CheckoutInput
+              name={"region"}
+              placeholder={"REGION"}
+              type={"text"}
+            />
+            <CheckoutInput
+              name={"postal_code"}
+              placeholder={"POSTAL CODE"}
+              type={"text"}
+            />
+          </div>
+          {/*// ) : (*/}
+          {/*//   <div className={"w-full flex justify-start"}>*/}
+          {/*//     <button*/}
+          {/*//       onClick={addressManuallyHandler}*/}
+          {/*//       className="font-maladroit font-[700] text-[14px] md:text-[16px] leading-[110%] text-black border-b border-black w-fit"*/}
+          {/*//     >*/}
+          {/*//       ENTER ADDRESS MANUALLY*/}
+          {/*//     </button>*/}
+          {/*//   </div>*/}
+          {/*// )}*/}
 
           {/*email and phone inputs*/}
 
@@ -128,9 +131,12 @@ const UnSubmittedForm = ({
           <div className="flex justify-end mt-[20px]">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isValid} // Disables the button if form is submitting, invalid, or untouched
               className={clsx(
-                "font-maladroit text-[12px] md:text-[14px] font-[700] py-[10px] md:py-[12px] px-[16px] md:px-[20px] leading-[150%] bg-[rgba(0,0,0,0.20)] text-[#909090] transition-colors"
+                "font-maladroit text-[12px] md:text-[14px] font-[700] py-[10px] md:py-[12px] px-[16px] md:px-[20px] leading-[150%] transition-colors",
+                isSubmitting || !isValid
+                  ? "cursor-not-allowed bg-[rgba(0,0,0,0.20)] text-[#909090]"
+                  : "bg-black text-white"
               )}
             >
               SAVE AND CONTINUE

@@ -24,7 +24,7 @@ const CustomRadio = ({
         value={value}
         name={name}
         checked={checked}
-        onChange={() => setChecked(value)}
+        onClick={() => setChecked(value)}
       />
 
       {/* Radio (shown when checked) */}

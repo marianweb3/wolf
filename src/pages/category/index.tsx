@@ -19,8 +19,6 @@ interface ApiResponse {
 
 const fetcher = (...args: [string]) => fetch(...args).then((res) => res.json());
 
-const breadcrumbItems = [{ label: "Home", link: "/" }, { label: "Apparel" }];
-
 const CategoryPage: React.FC = () => {
   const toggleMenu = useFiltersStore((state) => state.toggleMenu);
   const sortOption = useFiltersStore((state) => state.sortOption);
@@ -31,7 +29,10 @@ const CategoryPage: React.FC = () => {
 
   const { type } = useParams();
 
-  console.log([filters]);
+  const typeName = type?.replace(/-/g, " ") || "";
+
+  const breadcrumbItems = [{ label: "Home", link: "/" }, { label: typeName }];
+
   const {
     data,
     error,
@@ -41,7 +42,7 @@ const CategoryPage: React.FC = () => {
     error: Error | undefined;
     isLoading: IsLoadingResponse;
   } = useSWR(
-    `${API.api}/api/device?sort=${sortOption}&colors=${filters.selectedColors}&sizes=${filters.selectedSizes}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&typeName=${type}&page=${page}&limit=${limit}`,
+    `${API.api}/api/device?sort=${sortOption}&colors=${filters.selectedColors}&sizes=${filters.selectedSizes}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&typeName=${typeName}&page=${page}&limit=${limit}`,
     fetcher,
     {
       revalidateOnFocus: false, // Prevent revalidation when window gets focus
@@ -64,7 +65,9 @@ const CategoryPage: React.FC = () => {
   // if (isLoading) return <div>Loading...</div>;
   // if (error) return <div>Error loading data</div>;
 
-  console.log(data?.rows);
+  console.log("data?.rows.length=", data?.rows.length);
+  console.log("loading", isLoading);
+  console.log("error", error);
   return (
     <Layout>
       {/*filters & sort by section*/}
@@ -95,10 +98,14 @@ const CategoryPage: React.FC = () => {
       {/*objects data section*/}
       <div className="max-w-[1600px] mx-auto w-full mt-[30px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 gap-y-10 mb-[40px] 2xl:px-0 px-4">
         {isLoading ? (
-          <div>Loading...</div>
+          <div className="text-white text-center font-maladroit text-[18px]">
+            Loading...
+          </div>
         ) : error ? (
-          <div>Error loading products</div>
-        ) : (
+          <div className="text-white text-center font-maladroit text-[18px]">
+            Error loading products
+          </div>
+        ) : data?.rows.length > 0 ? (
           data?.rows.map((item) => (
             <ProductItem
               key={item.id}
@@ -108,6 +115,10 @@ const CategoryPage: React.FC = () => {
               isBlack={true}
             />
           ))
+        ) : (
+          <div className="flex justify-center col-start-2 text-black w-full font-maladroit text-[18px]">
+            No products found
+          </div>
         )}
       </div>
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { IoCloseSharp } from "react-icons/io5";
 import { AnimatePresence, motion } from "framer-motion";
 import ProductItem from "../../product/product-item";
 import useCartStore from "@/store/cartStore";
@@ -149,9 +148,14 @@ const Header = () => {
                   </li>
                 ))}
               </ul>
+              <div className="block lg:hidden mt-10">
+                <WalletMultiButton className="connect-button ">
+                  Select Wallet
+                </WalletMultiButton>
+              </div>
             </nav>
           ) : (
-            // Desktop Index (Original Design)
+            // Desktop Header (Original Design)
             <nav className="flex items-center gap-16 relative">
               <ul className="flex space-x-16">
                 {menuItems.slice(0, 2).map((link) => (
@@ -175,9 +179,9 @@ const Header = () => {
                   }}
                 ></div>
                 <img
-                  src="/public/wolfshop.webp"
+                  src="/wolfshop.webp"
                   alt="Wolf Shop"
-                  className="relative z-10 max-w-[220px] xl:max-w-[275px]"
+                  className="relative z-10 mt-[-10px] max-w-[220px] xl:max-w-[275px]"
                 />
               </Link>
 
@@ -237,19 +241,21 @@ const Header = () => {
               transform: "translate(-50%, -50%)",
             }}
           ></div>
-
-          <img
-            src="/public/wolfshop.webp"
-            alt="Wolf Shop"
-            className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
-          />
+          <Link to={"/"} className="relative">
+            <img
+              src="/wolfshop.webp"
+              alt="Wolf Shop"
+              className="relative z-10 max-w-[170px] sm:max-w-[220px] xl:max-w-[275px]"
+            />
+          </Link>
+        </div>
+        <div className="hidden lg:flex w-auto mr-10">
+          <WalletMultiButton className="connect-button">
+            Select Wallet
+          </WalletMultiButton>
         </div>
 
-        <WalletMultiButton className="connect-button">
-          Select Wallet
-        </WalletMultiButton>
-
-        <div className="flex gap-3 right-[160px] ml-[10px]">
+        <div className="flex gap-3 min-[1680px]:absolute right-[250px]">
           <div
             className="size-9 sm:size-[44px] rounded-full bg-white shrink-0 grid place-content-center cursor-pointer"
             onClick={toggleSearch}

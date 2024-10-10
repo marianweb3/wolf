@@ -24,10 +24,10 @@ const ProductItem: React.FC<ProductItemProps> = ({
   return (
     <Link
       to={`/product/${title}`}
-      className="shrink-0 grow-0 flex justify-center"
+      className="w-full grow-0 flex justify-center"
     >
-      <div className="flex flex-col gap-4 max-w-[520px]">
-        <div className="bg-[#8CE6FF] px-[18px] py-6 border-2 border-black aspect-square size-[520px]">
+      <div className="flex flex-col gap-4 md:max-w-[520px] w-full">
+        <div className="bg-[#8CE6FF] px-[18px] py-6 border-2 border-black aspect-square md:ize-[520px]">
           <img
             src={`${API.api}/${image?.imagePath}`}
             alt={image?.imagePath}

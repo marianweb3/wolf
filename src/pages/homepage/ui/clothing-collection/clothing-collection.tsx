@@ -167,7 +167,7 @@ const ClothingCollection: React.FC<ClothingCollectionProps> = ({
           {items.map((item, index) => (
             <div
               key={index}
-              className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-1 px-2" // Adjust width based on viewport size
+              className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-1 px-2"
             >
               <ProductItem
                 title={item.name}

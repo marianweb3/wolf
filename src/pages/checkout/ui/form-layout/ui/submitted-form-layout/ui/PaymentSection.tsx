@@ -117,7 +117,8 @@ const PaymentSection = () => {
         items: cartItems,
         shipping: order.formValues,
         total: totalPrice,
-        hash: signature
+        hash: signature,
+        address: publicKey.toString()
       }
 
       /// save 

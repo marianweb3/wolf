@@ -88,11 +88,13 @@ const ProductPage = () => {
   };
 
   if (error) {
-    return <div>Error fetching product</div>;
+    return (
+      <div className={"warning_error_success_text"}>Error fetching product</div>
+    );
   }
 
   if (!product) {
-    return <div>Loading...</div>;
+    return <div className={"warning_error_success_text"}>Loading...</div>;
   }
 
   return (

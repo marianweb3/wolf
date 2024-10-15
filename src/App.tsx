@@ -25,7 +25,7 @@ const App = () => {
   const network = WalletAdapterNetwork.Devnet;
 
   const endpoint = "https://api.devnet.solana.com";
-    //"https://mainnet.helius-rpc.com/?api-key=b1ad9a3b-fdae-423a-8fcd-b1c2c03c3fcc"; //useMemo(() => clusterApiUrl(network), [network]);
+  //"https://mainnet.helius-rpc.com/?api-key=b1ad9a3b-fdae-423a-8fcd-b1c2c03c3fcc"; //useMemo(() => clusterApiUrl(network), [network]);
 
   const wallets = useMemo(
     () => [
@@ -47,7 +47,10 @@ const App = () => {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/products/:type" element={<CategoryPage />} />
               <Route path="/product/:title" element={<ProductPage />} />
-              <Route path="/order-confirmed" element={<OrderConfirmedPage />} />
+              <Route
+                path="/order-confirmed/:hash"
+                element={<OrderConfirmedPage />}
+              />
             </Routes>
           </Router>
         </WalletModalProvider>

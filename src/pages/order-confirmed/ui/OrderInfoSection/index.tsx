@@ -3,14 +3,50 @@ import ItemCard from "@/pages/checkout/ui/aside-bag-cart/ItemCard";
 import Details from "@/pages/order-confirmed/ui/OrderInfoSection/Details";
 import { paymentMethods } from "@/pages/checkout/ui/form-layout/ui/submitted-form-layout/ui/PaymentSection";
 import clsx from "clsx";
-import useCartStore from "@/store/cartStore";
+import useSWR from "swr";
+import { CartItem } from "@/store/cartStore";
+import { useParams } from "react-router-dom";
+import { API } from "@/utils/api";
+import { FormValues } from "@/pages/checkout/ui/form-layout";
+
+interface Order {
+  id: number;
+  total: string;
+  OrderItems: CartItem[];
+  shipping: FormValues;
+}
+
+// Fetcher function for SWR
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const OrderInfoSection = () => {
-  const shipping_address = "350 5th Ave, New York, NY 10118, USA";
+  const { hash } = useParams(); // Access the dynamic 'hash' parameter
+
+  // Use SWR to fetch the order by hash
+  const { data, error, isLoading } = useSWR<Order[]>(
+    `${API.api}/api/ordersbyhash/${hash}`,
+    fetcher
+  );
+
+  // Handle loading and error states
+  if (isLoading)
+    return <div className={"warning_error_success_text"}>Loading...</div>;
+  if (error)
+    return (
+      <div className={"warning_error_success_text"}>
+        Error fetching order data
+      </div>
+    );
+  if (!data || data.length === 0)
+    return <div className={"warning_error_success_text"}>No order found</div>;
+
+  const order = data.at(0);
+
+  console.log(order);
+
+  // const shipping_address = "350 5th Ave, New York, NY 10118, USA";
 
   const payment = paymentMethods[0];
-
-  const { cartItems } = useCartStore();
 
   return (
     <div className={"flex flex-col border-b-2 border-[rgba(0,0,0,0.20)]"}>
@@ -19,9 +55,9 @@ const OrderInfoSection = () => {
           "uppercase text-black font-saotorpes text-[18px] md:text-[24px] font-[400] leading-[100%] mb-[16px] md:mb-[24px]"
         }
       >
-        order number (#000000)
+        order number (#{order?.id.toString().padStart(5, "0")})
       </h2>
-      {cartItems.map((item, index) => {
+      {order?.OrderItems.map((item, index) => {
         return (
           <div
             key={index}
@@ -38,7 +74,15 @@ const OrderInfoSection = () => {
               )}
             >
               <h3 className={"details_text_header"}>SHIPPING ADDRESS</h3>
-              <h3 className={"details_text"}>{shipping_address}</h3>
+              <h3 className={"details_text"}>
+                {order?.shipping.address +
+                  ", " +
+                  order?.shipping.city +
+                  ", " +
+                  order?.shipping.postal_code +
+                  ", " +
+                  order?.shipping.region}
+              </h3>
             </div>
 
             <div
@@ -63,7 +107,7 @@ const OrderInfoSection = () => {
 
             <div className={clsx("col-span-2", "flex flex-col gap-[8px]")}>
               <h3 className={"details_text_header"}>DETAILS</h3>
-              <Details />
+              <Details total={order?.total} />
             </div>
           </div>
         );

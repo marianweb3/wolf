@@ -26,7 +26,6 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 import { config } from "../../../../../../../config";
-import useSWR, { mutate } from "swr";
 import { API } from "@/utils/api";
 
 interface PaymentMethod {
@@ -46,10 +45,9 @@ export const paymentMethods: PaymentMethod[] = [
 const postOrderUrl = `${API.api}/api/orders`; // Define the API endpoint once
 
 const PaymentSection = () => {
-
   const navigate = useNavigate();
   const { setOrder, order } = useOrderStore();
-  const { cartItems } = useCartStore();
+  const { cartItems, clearCart } = useCartStore();
   const [busy, setBusy] = useState(false);
   const { connection } = useConnection();
   const { publicKey, sendTransaction, signTransaction } = useWallet();
@@ -88,53 +86,51 @@ const PaymentSection = () => {
     return await res.json();
   };
 
-const getBalance = async (address: string, tokenAddres: string) => {
+  const getBalance = async (address: string, tokenAddres: string) => {
     return new Promise((resolve) => {
-        connection.getParsedTokenAccountsByOwner(
-            new PublicKey(address),
-            {
-                mint: new PublicKey(tokenAddres),
-            }
-        ).then((balance) => {
-
-            if (balance.value.length) {
-
-                if (balance.value[0].account.data) {
-
-                    if (balance.value[0].account.data.parsed) {
-                        if (balance.value[0].account.data.parsed.info) {
-
-                            if (balance.value[0].account.data.parsed.info.tokenAmount) {
-
-                                if (balance.value[0].account.data.parsed.info.tokenAmount.uiAmount) {
-
-                                    const tokenBalance = balance.value[0].account.data.parsed.info.tokenAmount.uiAmount;
-
-                                    resolve(tokenBalance);
-                                } else {
-                                    resolve(0);
-                                }
-                            } else {
-                                resolve(0);
-                            }
-                        } else {
-                            resolve(0);
-                        }
-                    } else {
-                        resolve(0);
-                    }
-
-                } else {
-                    resolve(0);
-                }
-            } else {
-                resolve(0);
-            }
-        }).catch((err) => {
-            resolve(0);
+      connection
+        .getParsedTokenAccountsByOwner(new PublicKey(address), {
+          mint: new PublicKey(tokenAddres),
         })
-    })
-}
+        .then((balance) => {
+          if (balance.value.length) {
+            if (balance.value[0].account.data) {
+              if (balance.value[0].account.data.parsed) {
+                if (balance.value[0].account.data.parsed.info) {
+                  if (balance.value[0].account.data.parsed.info.tokenAmount) {
+                    if (
+                      balance.value[0].account.data.parsed.info.tokenAmount
+                        .uiAmount
+                    ) {
+                      const tokenBalance =
+                        balance.value[0].account.data.parsed.info.tokenAmount
+                          .uiAmount;
+
+                      resolve(tokenBalance);
+                    } else {
+                      resolve(0);
+                    }
+                  } else {
+                    resolve(0);
+                  }
+                } else {
+                  resolve(0);
+                }
+              } else {
+                resolve(0);
+              }
+            } else {
+              resolve(0);
+            }
+          } else {
+            resolve(0);
+          }
+        })
+        .catch((err) => {
+          resolve(0);
+        });
+    });
+  };
 
   const handleSubmit = async (e: any) => {
     if (!publicKey) {
@@ -153,9 +149,9 @@ const getBalance = async (address: string, tokenAddres: string) => {
       const mintToken = new PublicKey(config.token);
 
       const balance = await getBalance(publicKey.toString(), config.token);
-      
-      if(balance < totalPrice){
-        alert("Not enought balance");
+
+      if (parseFloat(String(balance)) < totalPrice) {
+        alert("Not enough balance");
         setBusy(false);
         return;
       }
@@ -210,6 +206,10 @@ const getBalance = async (address: string, tokenAddres: string) => {
       const result = await fetcher(postOrderUrl, data);
       console.log("Order submitted successfully:", result);
 
+      // Clear Zustand cart state
+      clearCart();
+      // Navigate to /order-confirmed/[hash] page
+      navigate(`/order-confirmed/${signature}`);
       setBusy(false);
     } catch (err) {
       console.error(err);

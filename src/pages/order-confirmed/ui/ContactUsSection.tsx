@@ -8,7 +8,7 @@ const ContactUsSection = () => {
     console.log("Contact us triggerred");
   };
 
-  const handleContinueShoping = () => {
+  const handleContinueShopping = () => {
     console.log("Continue shopping triggerred");
     navigate("/");
   };
@@ -67,10 +67,10 @@ const ContactUsSection = () => {
 
       <div className={"flex w-full sm:w-fit justify-end"}>
         <button
-          onClick={handleContinueShoping}
+          onClick={handleContinueShopping}
           className="max-w-[248px] py-[12px] px-[20px] w-full bg-black text-white text-[12px] md:text-[14px] font-[700] font-maladroit transition-all hover:bg-opacity-80"
         >
-          CONTINUE SHOPING
+          CONTINUE SHOPPING
         </button>
       </div>
     </div>

@@ -23,6 +23,7 @@ interface CartStore {
   addToCart: (item: CartItem) => void;
   removeFromCart: (index: number) => void;
   updateItemQuantity: (index: number, quantity: number) => void;
+  clearCart: () => void; // clearCart method to reset the cart state
 }
 
 const useCartStore = create<CartStore>()(
@@ -64,9 +65,17 @@ const useCartStore = create<CartStore>()(
             i === index ? { ...item, quantity } : item
           ),
         })),
+      // Add clearCart method to reset the cart state
+      clearCart: () =>
+        set({
+          cartItems: [],
+        }),
     }),
     {
-      name: "cart-storage",
+      name: "cart-storage", // Key in localStorage
+      partialize: (state) => ({
+        cartItems: state.cartItems, // Persist only isOpen and cartItems
+      }),
     }
   )
 );

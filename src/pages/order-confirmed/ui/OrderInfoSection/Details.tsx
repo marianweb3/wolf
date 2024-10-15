@@ -1,9 +1,13 @@
 import React from "react";
 import { ZeroConverter } from "@/pages/checkout/ui/aside-bag-cart";
 
-const Details = () => {
-  const sub_total = 78;
-  const tax = 30;
+interface DetailsProps {
+  total: string | undefined;
+}
+
+const Details = ({ total }: DetailsProps) => {
+  const sub_total = parseFloat(total || "");
+  const tax = 0;
   const delivery = 0;
 
   return (

@@ -41,19 +41,26 @@ const CartSideBar = () => {
             <IoCloseCircleSharp size={40} />
           </button>
         </div>
-        <div className="flex flex-col">
-          {cartItems.map((item, index) => (
-            <CartItem
-              key={index}
-              {...item}
-              onIncrease={() => updateItemQuantity(index, item.quantity + 1)}
-              onDecrease={() =>
-                updateItemQuantity(index, Math.max(1, item.quantity - 1))
-              }
-              onRemove={() => removeFromCart(index)}
-            />
-          ))}
-        </div>
+
+        {cartItems.length === 0 ? (
+          <div className={"warning_error_success_text"}>
+            Oops. Your cart is empty. Add something :)
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {cartItems.map((item, index) => (
+              <CartItem
+                key={index}
+                {...item}
+                onIncrease={() => updateItemQuantity(index, item.quantity + 1)}
+                onDecrease={() =>
+                  updateItemQuantity(index, Math.max(1, item.quantity - 1))
+                }
+                onRemove={() => removeFromCart(index)}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div className="w-full border-t border-black px-8 pb-8">
         <div className="py-4 flex items-center justify-between">
@@ -66,7 +73,10 @@ const CartSideBar = () => {
         </div>
         <button
           className="w-full bg-black text-white py-3 text-[18px] leading-[22.64px] font-maladroit "
-          onClick={() => navigate("/checkout")}
+          onClick={() => {
+            toggleCart();
+            navigate("/checkout");
+          }}
         >
           PROCEED
         </button>

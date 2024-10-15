@@ -32,6 +32,9 @@
   .your_bag_text {
     @apply text-[#0000004D] text-[16px] md:text-[20px] font-[700] font-maladroit uppercase;
   }
+  .warning_error_success_text {
+    @apply flex justify-center col-start-2 text-black w-full font-maladroit text-[18px];
+  }
 }
 
 body {

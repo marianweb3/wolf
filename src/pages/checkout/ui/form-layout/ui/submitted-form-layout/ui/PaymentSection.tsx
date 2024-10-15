@@ -46,6 +46,7 @@ export const paymentMethods: PaymentMethod[] = [
 const postOrderUrl = `${API.api}/api/orders`; // Define the API endpoint once
 
 const PaymentSection = () => {
+
   const navigate = useNavigate();
   const { setOrder, order } = useOrderStore();
   const { cartItems } = useCartStore();
@@ -87,22 +88,77 @@ const PaymentSection = () => {
     return await res.json();
   };
 
+const getBalance = async (address: string, tokenAddres: string) => {
+    return new Promise((resolve) => {
+        connection.getParsedTokenAccountsByOwner(
+            new PublicKey(address),
+            {
+                mint: new PublicKey(tokenAddres),
+            }
+        ).then((balance) => {
+
+            if (balance.value.length) {
+
+                if (balance.value[0].account.data) {
+
+                    if (balance.value[0].account.data.parsed) {
+                        if (balance.value[0].account.data.parsed.info) {
+
+                            if (balance.value[0].account.data.parsed.info.tokenAmount) {
+
+                                if (balance.value[0].account.data.parsed.info.tokenAmount.uiAmount) {
+
+                                    const tokenBalance = balance.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+
+                                    resolve(tokenBalance);
+                                } else {
+                                    resolve(0);
+                                }
+                            } else {
+                                resolve(0);
+                            }
+                        } else {
+                            resolve(0);
+                        }
+                    } else {
+                        resolve(0);
+                    }
+
+                } else {
+                    resolve(0);
+                }
+            } else {
+                resolve(0);
+            }
+        }).catch((err) => {
+            resolve(0);
+        })
+    })
+}
+
   const handleSubmit = async (e: any) => {
     if (!publicKey) {
       alert("Pleas connect wallet");
       return;
     }
 
-    const amount = parseInt(String(totalPrice * 1000000));
+    const decimals = 100000000; //1000000
+    const amount = parseInt(String(totalPrice * decimals));
 
     try {
       if (!publicKey || !signTransaction) throw new WalletNotConnectedError();
 
-      setBusy(true);
-
       const recipientAddress = new PublicKey(config.contract);
 
       const mintToken = new PublicKey(config.token);
+
+      const balance = await getBalance(publicKey.toString(), config.token);
+      
+      if(balance < totalPrice){
+        alert("Not enought balance");
+        setBusy(false);
+        return;
+      }
 
       const associatedTokenFrom = await getAssociatedTokenAddress(
         mintToken,

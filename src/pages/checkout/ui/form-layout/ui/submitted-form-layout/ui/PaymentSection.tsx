@@ -9,12 +9,25 @@ import {
   createTransferInstruction,
   getAssociatedTokenAddress,
   getAccount,
-  createAssociatedTokenAccountInstruction
+  createAssociatedTokenAccountInstruction,
 } from "@solana/spl-token";
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { WalletNotConnectedError, SignerWalletAdapterProps } from '@solana/wallet-adapter-base';
-import { Transaction, PublicKey, TransactionInstruction, Connection, SystemProgram, TransactionMessage, VersionedTransaction } from '@solana/web3.js';
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import {
+  WalletNotConnectedError,
+  SignerWalletAdapterProps,
+} from "@solana/wallet-adapter-base";
+import {
+  Transaction,
+  PublicKey,
+  TransactionInstruction,
+  Connection,
+  SystemProgram,
+  TransactionMessage,
+  VersionedTransaction,
+} from "@solana/web3.js";
 import { config } from "../../../../../../../config";
+import useSWR, { mutate } from "swr";
+import { API } from "@/utils/api";
 
 interface PaymentMethod {
   id: string;
@@ -29,6 +42,8 @@ export const paymentMethods: PaymentMethod[] = [
   // { id: "metamask", label: "MetaMask", icon: "/icons/metamask.svg" },
   { id: "сrypto", label: "Crypto", icon: "/icons/crypto.png" },
 ];
+
+const postOrderUrl = `${API.api}/api/orders`; // Define the API endpoint once
 
 const PaymentSection = () => {
   const navigate = useNavigate();
@@ -58,17 +73,29 @@ const PaymentSection = () => {
     0
   );
 
-  const handleSubmit = async (e: any) => {
+  const fetcher = async (url: string, data: any) => {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to submit order");
+    }
+    return await res.json();
+  };
 
-    if(!publicKey){
+  const handleSubmit = async (e: any) => {
+    if (!publicKey) {
       alert("Pleas connect wallet");
       return;
     }
 
-    const amount = parseInt(totalPrice * 1000000);
+    const amount = parseInt(String(totalPrice * 1000000));
 
     try {
-
       if (!publicKey || !signTransaction) throw new WalletNotConnectedError();
 
       setBusy(true);
@@ -94,7 +121,7 @@ const PaymentSection = () => {
         associatedTokenTo,
         publicKey,
         amount
-      )
+      );
 
       const blockHash = await connection.getLatestBlockhash("processed");
 
@@ -110,7 +137,7 @@ const PaymentSection = () => {
       await connection.confirmTransaction({
         blockhash: blockHash.blockhash,
         lastValidBlockHeight: blockHash.lastValidBlockHeight,
-        signature
+        signature,
       });
 
       const data = {
@@ -118,22 +145,22 @@ const PaymentSection = () => {
         shipping: order.formValues,
         total: totalPrice,
         hash: signature,
-        address: publicKey.toString()
-      }
+        address: publicKey.toString(),
+        userId: 1,
+      };
 
-      /// save 
+      /// save
+      /// POST request using fetcher function
+      const result = await fetcher(postOrderUrl, data);
+      console.log("Order submitted successfully:", result);
 
       setBusy(false);
-
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setBusy(false);
     }
-
   };
 
-
-  console.log(order);
   return (
     <div className="w-full flex flex-col gap-[36px] md:gap-[42px] border-y border-[#C0C0C0] py-[24px]">
       {/* Payment Title & Billing matches shipping address checkbox */}
